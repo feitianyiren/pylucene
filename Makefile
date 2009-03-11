@@ -14,7 +14,7 @@
 # site-packages directory.
 #
 
-VERSION=2.4.1-rc1
+VERSION=2.4.1-rc2
 LUCENE_SVN_VER=HEAD
 LUCENE_VER=2.4.1
 LUCENE_SVN=http://svn.apache.org/repos/asf/lucene/java/tags/lucene_2_4_1
@@ -238,6 +238,6 @@ distrib:
 	cd distrib; openssl md5 < $(ARCHIVE) > $(ARCHIVE).md5
 
 stage:
-	scp -p $(ARCHIVE) $(ARCHIVE).asc $(ARCHIVE).md5 \
-               people.apache.org:public_html/staging_area
+	cd distrib; scp -p $(ARCHIVE) $(ARCHIVE).asc $(ARCHIVE).md5 \
+                           people.apache.org:public_html/staging_area
 
