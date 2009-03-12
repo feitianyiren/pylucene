@@ -14,7 +14,7 @@
 # site-packages directory.
 #
 
-VERSION=2.4.1-rc2
+VERSION=2.4.1-rc3
 LUCENE_SVN_VER=HEAD
 LUCENE_VER=2.4.1
 LUCENE_SVN=http://svn.apache.org/repos/asf/lucene/java/tags/lucene_2_4_1
@@ -194,7 +194,7 @@ GENERATE=$(JCC) $(foreach jar,$(JARS),--jar $(jar)) \
            --mapping java.util.Properties 'getProperty:(Ljava/lang/String;)Ljava/lang/String;' \
            --sequence org.apache.lucene.search.Hits 'length:()I' 'doc:(I)Lorg/apache/lucene/document/Document;' \
            --version $(LUCENE_VER) \
-           --module collections.py \
+           --module python/collections.py \
            --files $(NUM_FILES)
 
 generate: jars
