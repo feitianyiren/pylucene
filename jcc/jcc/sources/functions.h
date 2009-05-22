@@ -30,6 +30,8 @@ typedef intobjargproc ssizeobjargproc;
 typedef intintobjargproc ssizessizeobjargproc;
 #endif
 
+typedef jclass (*getclassfn)(void);
+
 PyObject *PyErr_SetArgsError(char *name, PyObject *args);
 PyObject *PyErr_SetArgsError(PyObject *self, char *name, PyObject *args);
 PyObject *PyErr_SetArgsError(PyTypeObject *type, char *name, PyObject *args);
@@ -72,7 +74,7 @@ PyObject *j2p(const java::lang::String& js);
 java::lang::String p2j(PyObject *object);
 
 PyObject *make_descriptor(PyTypeObject *value);
-PyObject *make_descriptor(jclass (*initializeClass)(void));
+PyObject *make_descriptor(getclassfn initializeClass);
 PyObject *make_descriptor(PyObject *value);
 PyObject *make_descriptor(PyObject *(*wrapfn)(const jobject &));
 PyObject *make_descriptor(jboolean value);
@@ -91,20 +93,19 @@ PyObject *callSuper(PyTypeObject *type,
 PyObject *callSuper(PyTypeObject *type, PyObject *self,
                     const char *name, PyObject *args, int cardinality);
 
-template<class T> PyObject *get_iterator(PyObject *self)
+template<class T> PyObject *get_iterator(T *self)
 {
     java::util::Iterator iterator((jobject) NULL);
 
-    OBJ_CALL(iterator = (((T *) self)->object.iterator()));
+    OBJ_CALL(iterator = self->object.iterator());
     return java::util::t_Iterator::wrap_Object(iterator);
 }
 
-template<class U, class V> PyObject *get_iterator_next(PyObject *self)
+template<class T, class U, class V> PyObject *get_iterator_next(T *self)
 {
-    java::util::t_Iterator *iterator = (java::util::t_Iterator *) self;
     jboolean hasNext;
 
-    OBJ_CALL(hasNext = iterator->object.hasNext());
+    OBJ_CALL(hasNext = self->object.hasNext());
     if (!hasNext)
     {
         PyErr_SetNone(PyExc_StopIteration);
@@ -112,7 +113,7 @@ template<class U, class V> PyObject *get_iterator_next(PyObject *self)
     }
 
     V next((jobject) NULL);
-    OBJ_CALL(next = iterator->object.next());
+    OBJ_CALL(next = self->object.next());
 
     jclass cls = java::lang::String::initializeClass();
     if (env->get_vm_env()->IsInstanceOf(next.this$, cls))
@@ -121,12 +122,11 @@ template<class U, class V> PyObject *get_iterator_next(PyObject *self)
     return U::wrap_Object(next);
 }
 
-template<class U, class V> PyObject *get_enumeration_nextElement(PyObject *self)
+template<class T, class U, class V> PyObject *get_enumeration_next(T *self)
 {
-    java::util::t_Enumeration *enumeration = (java::util::t_Enumeration *) self;
     jboolean hasMoreElements;
 
-    OBJ_CALL(hasMoreElements = enumeration->object.hasMoreElements());
+    OBJ_CALL(hasMoreElements = self->object.hasMoreElements());
     if (!hasMoreElements)
     {
         PyErr_SetNone(PyExc_StopIteration);
@@ -134,7 +134,7 @@ template<class U, class V> PyObject *get_enumeration_nextElement(PyObject *self)
     }
 
     V next((jobject) NULL);
-    OBJ_CALL(next = enumeration->object.nextElement());
+    OBJ_CALL(next = self->object.nextElement());
 
     jclass cls = java::lang::String::initializeClass();
     if (env->get_vm_env()->IsInstanceOf(next.this$, cls))
@@ -143,12 +143,11 @@ template<class U, class V> PyObject *get_enumeration_nextElement(PyObject *self)
     return U::wrap_Object(next);
 }
 
-template<class T, class U, class V> PyObject *get_next(PyObject *self)
+template<class T, class U, class V> PyObject *get_next(T *self)
 {
-    T *iterator = (T *) self;
     V next((jobject) NULL);
 
-    OBJ_CALL(next = iterator->object.next());
+    OBJ_CALL(next = self->object.next());
     if (!next)
     {
         PyErr_SetNone(PyExc_StopIteration);
@@ -167,8 +166,10 @@ PyObject *get_extension_next(PyObject *self);
 PyObject *get_extension_nextElement(PyObject *self);
 
 jobjectArray fromPySequence(jclass cls, PyObject *sequence);
-PyObject *castCheck(PyObject *obj, jclass (*initializeClass)(),
+PyObject *castCheck(PyObject *obj, getclassfn initializeClass,
                     int reportError);
+void installType(PyTypeObject *type, PyObject *module, char *name,
+                 int isExtension);
 
 extern PyTypeObject FinalizerClass$$Type;
 extern PyTypeObject FinalizerProxy$$Type;

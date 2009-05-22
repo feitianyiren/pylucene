@@ -390,7 +390,7 @@ def extension(env, out, indent, cls, names, name, count, method):
 
 def python(env, out_h, out, cls, superCls, names, superNames,
            constructors, methods, protectedMethods, fields, instanceFields,
-           mapping, sequence, declares, typeset, excludes, moduleName):
+           mapping, sequence, rename, declares, typeset, excludes, moduleName):
 
     line(out_h)
     line(out_h, 0, '#include <Python.h>')
@@ -711,7 +711,7 @@ def python(env, out_h, out, cls, superCls, names, superNames,
         if iteratorExt:
             tp_iter = 'get_extension_iterator'
         else:
-            tp_iter = 'get_iterator<t_%s>' %(names[-1])
+            tp_iter = '((PyObject *(*)(t_%s *)) get_iterator<t_%s>)' %(names[-1], names[-1])
         tp_iternext = '0'
     elif nextMethod and iterator.isAssignableFrom(cls):
         tp_iter = 'PyObject_SelfIter'
@@ -720,7 +720,7 @@ def python(env, out_h, out, cls, superCls, names, superNames,
         if nextExt:
             tp_iternext = 'get_extension_next'
         else:
-            tp_iternext = '(get_iterator_next<%s%st_%s,%s>)' %(ns, sep, n, returnName)
+            tp_iternext = '((PyObject *(*)(java::util::t_Iterator *)) get_iterator_next<java::util::t_Iterator,%s%st_%s,%s>)' %(ns, sep, n, returnName)
     elif nextElementMethod and enumeration.isAssignableFrom(cls):
         tp_iter = 'PyObject_SelfIter'
         returnName = typename(nextElementMethod.getReturnType(), cls, False)
@@ -728,7 +728,7 @@ def python(env, out_h, out, cls, superCls, names, superNames,
         if nextElementExt:
             tp_iternext = 'get_extension_nextElement'
         else:
-            tp_iternext = '(get_enumeration_nextElement<%s%st_%s,%s>)' %(ns, sep, n, returnName)
+            tp_iternext = '((PyObject *(*)(java::util::t_Enumeration *)) get_enumeration_next<java::util::t_Enumeration,%s%st_%s,%s>)' %(ns, sep, n, returnName)
     elif nextMethod:
         tp_iter = 'PyObject_SelfIter'
         returnName = typename(nextMethod.getReturnType(), cls, False)
@@ -736,7 +736,7 @@ def python(env, out_h, out, cls, superCls, names, superNames,
         if nextExt:
             tp_iternext = 'get_extension_next'
         else:
-            tp_iternext = '(get_next<t_%s,%s%st_%s,%s>)' %(names[-1], ns, sep, n, returnName)
+            tp_iternext = '((PyObject *(*)(t_%s *)) get_next<t_%s,%s%st_%s,%s>)' %(names[-1], names[-1], ns, sep, n, returnName)
     else:
         tp_iter = '0'
         tp_iternext = '0'
@@ -807,10 +807,8 @@ def python(env, out_h, out, cls, superCls, names, superNames,
     line(out)
     line(out, indent, 'void t_%s::install(PyObject *module)', names[-1])
     line(out, indent, '{')
-    if isExtension:
-        line(out, indent + 1, 'INSTALL_EXTENSION(%s, module);', names[-1])
-    else:
-        line(out, indent + 1, 'INSTALL_TYPE(%s, module);', names[-1])
+    line(out, indent + 1, 'installType(&%s$$Type, module, "%s", %d);',
+         names[-1], rename or names[-1], isExtension and 1 or 0)
     for inner in cls.getDeclaredClasses():
         if inner in typeset:
             if Modifier.isStatic(inner.getModifiers()):
@@ -1278,7 +1276,7 @@ def module(out, allInOne, classes, cppdir, moduleName, shared):
 
 def compile(env, jccPath, output, moduleName, install, dist, debug, jars,
             version, prefix, root, install_dir, use_distutils,
-            shared, compiler, modules):
+            shared, compiler, modules, wininst):
 
     try:
         if use_distutils:
@@ -1402,7 +1400,9 @@ def compile(env, jccPath, output, moduleName, install, dist, debug, jars,
         script_args.append('--install-lib=%s' % install_dir)
 
     if dist:
-        if with_setuptools:
+        if wininst:
+            script_args.append('bdist_wininst')
+        elif with_setuptools:
             script_args.append('bdist_egg')
         else:
             script_args.append('bdist')

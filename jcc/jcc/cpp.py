@@ -257,6 +257,7 @@ def jcc(args):
     version = ''
     mappings = {}
     sequences = {}
+    renames = {}
     env = None
     wrapperFiles = 1
     prefix = None
@@ -265,6 +266,7 @@ def jcc(args):
     use_distutils = False
     shared = False
     dist = False
+    wininst = False
     compiler = None
 
     i = 1
@@ -319,6 +321,10 @@ def jcc(args):
             elif arg == '--sequence':
                 sequences[args[i + 1]] = (args[i + 2], args[i + 3])
                 i += 3
+            elif arg == '--rename':
+                i += 1
+                renames.update(dict([arg.split('=')
+                                     for arg in args[i].split(',')]))
             elif arg == '--files':
                 i += 1
                 wrapperFiles = args[i]
@@ -340,9 +346,16 @@ def jcc(args):
             elif arg == '--bdist':
                 from python import compile
                 dist = True
+            elif arg == '--wininst':
+                from python import compile
+                wininst = True
+                dist = True
             elif arg == '--compiler':
                 i += 1
                 compiler = args[i]
+            elif arg == '--reserved':
+                i += 1
+                RESERVED.update(args[i].split(','))
             else:
                 raise ValueError, "Invalid argument: %s" %(arg)
         else:
@@ -363,7 +376,7 @@ def jcc(args):
             compile(env, os.path.dirname(args[0]), output, moduleName,
                     install, dist, debug, jars, version,
                     prefix, root, install_dir, use_distutils,
-                    shared, compiler, modules)
+                    shared, compiler, modules, wininst)
     else:
         for className in classNames:
             cls = findClass(className.replace('.', '/'))
@@ -444,6 +457,7 @@ def jcc(args):
                            constructors, methods, protectedMethods,
                            fields, instanceFields,
                            mappings.get(className), sequences.get(className),
+                           renames.get(className),
                            declares, typeset, excludes, moduleName)
 
                 line(out_h)
@@ -474,7 +488,7 @@ def jcc(args):
                 compile(env, os.path.dirname(args[0]), output, moduleName,
                         install, dist, debug, jars, version,
                         prefix, root, install_dir, use_distutils,
-                        shared, compiler, modules)
+                        shared, compiler, modules, wininst)
 
 
 def header(env, out, cls, typeset, packages, excludes):
