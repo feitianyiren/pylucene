@@ -9,6 +9,7 @@ Version 2.2 -> 2.3
  - added support for --rename to workaround python flattened namespace clashes
  - fixed bug with Enumeration/Iterator template function instantiation
  - removed -framework Python from darwin link flags in setup.py
+ - fixed bug with passing list of extension objects
 
 Version 2.1 -> 2.2
 ------------------
