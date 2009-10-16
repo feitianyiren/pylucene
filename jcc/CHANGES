@@ -12,6 +12,7 @@ Version 2.3 -> 2.4
  - added --arch command line flag to filter Mac OS X python config settings
  - cast_() and instance_() methods now generated on extension classes as well
  - fixed bug with reporting Python error that occurred in an extension class
+ - fixed bug with passing list of extension objects
 
 Version 2.2 -> 2.3
 ------------------
