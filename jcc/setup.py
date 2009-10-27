@@ -12,7 +12,7 @@
 
 import os, sys, platform, subprocess
 
-jcc_ver = '2.4'
+jcc_ver = '2.4.1'
 python_ver = '%d.%d.%d' %(sys.version_info[0:3])
 machine = platform.machine()
 
@@ -109,10 +109,11 @@ try:
         raise ImportError
     from setuptools import setup, Extension
     from pkg_resources import require
-    with_setuptools = require('setuptools')[0].version
-
+    with_setuptools = require('setuptools')[0].parsed_version
+    
     enable_shared = False
-    if with_setuptools >= '0.6c7' and 'NO_SHARED' not in os.environ:
+    with_setuptools_min = ('00000000', '00000006', '*c', '00000007', '*final')
+    if with_setuptools >= with_setuptools_min and 'NO_SHARED' not in os.environ:
         if platform in ('darwin', 'ipod', 'win32'):
             enable_shared = True
         elif platform == 'linux2':
