@@ -101,7 +101,7 @@ template<class T> PyObject *get_iterator(T *self)
     return java::util::t_Iterator::wrap_Object(iterator);
 }
 
-template<class T, class U, class V> PyObject *get_iterator_next(T *self)
+template<class T, class U> PyObject *get_iterator_next(T *self)
 {
     jboolean hasNext;
 
@@ -112,17 +112,17 @@ template<class T, class U, class V> PyObject *get_iterator_next(T *self)
         return NULL;
     }
 
-    V next((jobject) NULL);
+    java::lang::Object next((jobject) NULL);
     OBJ_CALL(next = self->object.next());
 
     jclass cls = java::lang::String::initializeClass();
     if (env->get_vm_env()->IsInstanceOf(next.this$, cls))
         return env->fromJString((jstring) next.this$);
 
-    return U::wrap_Object(next);
+    return U::wrap_jobject(next.this$);
 }
 
-template<class T, class U, class V> PyObject *get_enumeration_next(T *self)
+template<class T, class U> PyObject *get_enumeration_next(T *self)
 {
     jboolean hasMoreElements;
 
@@ -133,14 +133,14 @@ template<class T, class U, class V> PyObject *get_enumeration_next(T *self)
         return NULL;
     }
 
-    V next((jobject) NULL);
+    java::lang::Object next((jobject) NULL);
     OBJ_CALL(next = self->object.nextElement());
 
     jclass cls = java::lang::String::initializeClass();
     if (env->get_vm_env()->IsInstanceOf(next.this$, cls))
         return env->fromJString((jstring) next.this$);
 
-    return U::wrap_Object(next);
+    return U::wrap_jobject(next.this$);
 }
 
 template<class T, class U, class V> PyObject *get_next(T *self)

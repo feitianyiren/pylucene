@@ -718,7 +718,7 @@ def python(env, out_h, out, cls, superCls, names, superNames,
         if nextExt:
             tp_iternext = 'get_extension_next'
         else:
-            tp_iternext = '((PyObject *(*)(java::util::t_Iterator *)) get_iterator_next<java::util::t_Iterator,%s%st_%s,%s>)' %(ns, sep, n, returnName)
+            tp_iternext = '((PyObject *(*)(java::util::t_Iterator *)) get_iterator_next<java::util::t_Iterator,%s%st_%s>)' %(ns, sep, n)
     elif nextElementMethod and enumeration.isAssignableFrom(cls):
         tp_iter = 'PyObject_SelfIter'
         returnName = typename(nextElementMethod.getReturnType(), cls, False)
@@ -726,7 +726,7 @@ def python(env, out_h, out, cls, superCls, names, superNames,
         if nextElementExt:
             tp_iternext = 'get_extension_nextElement'
         else:
-            tp_iternext = '((PyObject *(*)(java::util::t_Enumeration *)) get_enumeration_next<java::util::t_Enumeration,%s%st_%s,%s>)' %(ns, sep, n, returnName)
+            tp_iternext = '((PyObject *(*)(java::util::t_Enumeration *)) get_enumeration_next<java::util::t_Enumeration,%s%st_%s>)' %(ns, sep, n)
     elif nextMethod:
         tp_iter = 'PyObject_SelfIter'
         returnName = typename(nextMethod.getReturnType(), cls, False)
