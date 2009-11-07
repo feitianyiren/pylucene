@@ -1,4 +1,9 @@
 
+Version 2.9.0 -> 2.9.1
+----------------------
+ - Lucene Java sources now included in PyLucene source distribution
+ - PyLucene built with JCC 2.4.1
+
 Version 2.4.1 -> 2.9.0
 ----------------------
  - renamed the Highlighter's SpanScorer class to HighlighterSpanScorer
