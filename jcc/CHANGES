@@ -2,9 +2,9 @@ Version 2.4 -> 2.4.1
 --------------------
  - fixed bug in code comparing setuptools versions when >= 0.6c10
  - verified build against setuptools from distribute 0.6.6
+ - verified build against setuptools 0.6c11
  - renamed patch.43 to differentiate setuptools versions
  - fixed bug with iterator_next templates using return class != Object
- - 
 
 Version 2.3 -> 2.4
 ------------------
