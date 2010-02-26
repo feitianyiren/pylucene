@@ -14,10 +14,10 @@
 # site-packages directory.
 #
 
-VERSION=2.9.1-1
+VERSION=2.9.2-1
 LUCENE_SVN_VER=HEAD
-LUCENE_VER=2.9.1
-LUCENE_SVN=http://svn.apache.org/repos/asf/lucene/java/tags/lucene_2_9_1
+LUCENE_VER=2.9.2
+LUCENE_SVN=http://svn.apache.org/repos/asf/lucene/java/tags/lucene_2_9_2
 PYLUCENE:=$(shell pwd)
 LUCENE=lucene-java-$(LUCENE_VER)
 

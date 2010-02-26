@@ -1,4 +1,8 @@
 
+Version 2.9.1 -> 2.9.2
+----------------------
+ - no changes other than using Lucene 2.9.2 sources
+
 Version 2.9.0 -> 2.9.1
 ----------------------
  - Lucene Java sources now included in PyLucene source distribution
