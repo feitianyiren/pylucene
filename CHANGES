@@ -1,4 +1,9 @@
 
+Version 3.0.0 -> 3.0.1
+----------------------
+ - using Lucene 3.0.1 sources
+ - PyLucene built with JCC 2.5.1
+
 Version 2.9.0 -> 3.0.0
 ----------------------
  - unit tests ported to new API
