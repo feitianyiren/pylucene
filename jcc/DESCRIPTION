@@ -1,6 +1,6 @@
 
 For changes since earlier releases, see:
-  http://svn.apache.org/repos/asf/lucene/pylucene/trunk/jcc/CHANGES
+  http://svn.apache.org/repos/asf/lucene/pylucene/tags/pylucene_3_0_1/jcc/CHANGES
 
 JCC is a C++ code generator for producing the code necessary to call
 into Java classes from CPython via Java's Native Invocation Interface (JNI).
