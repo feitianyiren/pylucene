@@ -14,10 +14,10 @@
 # site-packages directory.
 #
 
-VERSION=3.1-0
+VERSION=3.x-0
 LUCENE_SVN_VER=HEAD
-LUCENE_VER=3.1
-LUCENE_SVN=http://svn.apache.org/repos/asf/lucene/dev/trunk/lucene
+LUCENE_VER=3.x
+LUCENE_SVN=http://svn.apache.org/repos/asf/lucene/dev/branches/branch_3x/lucene
 PYLUCENE:=$(shell pwd)
 LUCENE=lucene-java-$(LUCENE_VER)
 
