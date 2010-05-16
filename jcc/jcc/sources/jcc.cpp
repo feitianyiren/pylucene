@@ -45,6 +45,8 @@ static PyObject *t_jccenv_isCurrentThreadAttached(PyObject *self);
 static PyObject *t_jccenv_strhash(PyObject *self, PyObject *arg);
 static PyObject *t_jccenv__dumpRefs(PyObject *self,
                                     PyObject *args, PyObject *kwds);
+static PyObject *t_jccenv__addClassPath(PyObject *self, PyObject *args);
+
 static PyObject *t_jccenv__get_jni_version(PyObject *self, void *data);
 static PyObject *t_jccenv__get_java_version(PyObject *self, void *data);
 
@@ -69,6 +71,8 @@ static PyMethodDef t_jccenv_methods[] = {
       METH_O, NULL },
     { "_dumpRefs", (PyCFunction) t_jccenv__dumpRefs,
       METH_VARARGS | METH_KEYWORDS, NULL },
+    { "_addClassPath", (PyCFunction) t_jccenv__addClassPath,
+      METH_VARARGS, NULL },
     { NULL, NULL, 0, NULL }
 };
 
@@ -267,6 +271,17 @@ static PyObject *t_jccenv__dumpRefs(PyObject *self,
     return result;
 }
 
+static PyObject *t_jccenv__addClassPath(PyObject *self, PyObject *args)
+{
+    const char *classpath;
+
+    if (!PyArg_ParseTuple(args, "s", &classpath))
+        return NULL;
+
+    env->setClassPath(classpath);
+
+    Py_RETURN_NONE;
+}
 
 static PyObject *t_jccenv__get_jni_version(PyObject *self, void *data)
 {

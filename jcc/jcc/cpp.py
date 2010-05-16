@@ -318,6 +318,7 @@ def jcc(args):
     generics = hasattr(_jcc, "Type")
     arch = []
     resources = []
+    imports = {}
 
     i = 1
     while i < len(args):
@@ -425,6 +426,9 @@ def jcc(args):
             elif arg == '--resources':
                 i += 1
                 resources.append(args[i])
+            elif arg == '--import':
+                i += 1
+                imports[args[i]] = ()
             else:
                 raise ValueError, "Invalid argument: %s" %(arg)
         else:
@@ -440,6 +444,12 @@ def jcc(args):
     typeset = set()
     excludes = set(excludes)
 
+    if imports:
+        if shared:
+            imports = dict((__import__(import_), set()) for import_ in imports)
+        else:
+            raise ValueError, "--shared must be used when using --import"
+
     if recompile or not build and (install or dist):
         if moduleName is None:
             raise ValueError, 'module name not specified (use --python)'
@@ -448,8 +458,23 @@ def jcc(args):
                     install, dist, debug, jars, version,
                     prefix, root, install_dir, home_dir, use_distutils,
                     shared, compiler, modules, wininst, find_jvm_dll,
-                    arch, generics, resources)
+                    arch, generics, resources, imports)
     else:
+        if imports:
+            def walk((include, importset), dirname, names):
+                for name in names:
+                    if name.endswith('.h'):
+                        className = os.path.join(dirname[len(include) + 1:],
+                                                 name[:-2])
+                        if os.path.sep != '/':
+                            className = className.replace(os.path.sep, '/')
+                        importset.add(findClass(className))
+            for import_, importset in imports.iteritems():
+                env._addClassPath(import_.CLASSPATH)
+                include = os.path.join(import_.__dir__, 'include')
+                os.path.walk(include, walk, (include, importset))
+                typeset.update(importset)
+
         for className in classNames:
             if className in excludes:
                 continue
@@ -501,6 +526,9 @@ def jcc(args):
                 out_cpp = file(os.path.join(cppdir, fileName), 'w')
 
         done = set()
+        for importset in imports.itervalues():
+            done.update(importset)
+
         todo = typeset - done
 	if allInOne and wrapperFiles > 1:
             classesPerFile = max(1, len(todo) / wrapperFiles)
@@ -562,14 +590,15 @@ def jcc(args):
 
         if moduleName:
             out = file(os.path.join(cppdir, moduleName) + '.cpp', 'w')
-            module(out, allInOne, done, cppdir, moduleName, shared, generics)
+            module(out, allInOne, done, imports, cppdir, moduleName,
+                   shared, generics)
             out.close()
             if build or install or dist:
                 compile(env, os.path.dirname(args[0]), output, moduleName,
                         install, dist, debug, jars, version,
                         prefix, root, install_dir, home_dir, use_distutils,
                         shared, compiler, modules, wininst, find_jvm_dll,
-                        arch, generics, resources)
+                        arch, generics, resources, imports)
 
 
 def header(env, out, cls, typeset, packages, excludes, generics):

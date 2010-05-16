@@ -1462,7 +1462,8 @@ def package(out, allInOne, cppdir, namespace, names):
         package(out, allInOne, cppdir, entries, names + (name,))
 
 
-def module(out, allInOne, classes, cppdir, moduleName, shared, generics):
+def module(out, allInOne, classes, imports, cppdir, moduleName,
+           shared, generics):
 
     extname = '_%s' %(moduleName)
     line(out, 0, '#include <Python.h>')
@@ -1473,11 +1474,15 @@ def module(out, allInOne, classes, cppdir, moduleName, shared, generics):
         out_init = file(os.path.join(cppdir, '__init__.cpp'), 'w')
     namespaces = {}
     for cls in classes:
-        namespace = namespaces
-        classNames = cls.getName().split('.')
-        for className in classNames[:-1]:
-            namespace = namespace.setdefault(className, {})
-        namespace[classNames[-1]] = True
+        for importset in imports.itervalues():
+            if cls in importset:
+                break
+        else:
+            namespace = namespaces
+            classNames = cls.getName().split('.')
+            for className in classNames[:-1]:
+                namespace = namespace.setdefault(className, {})
+            namespace[classNames[-1]] = True
     if allInOne:
         package(out_init, True, cppdir, namespaces, ())
         out_init.close()
@@ -1513,7 +1518,7 @@ def module(out, allInOne, classes, cppdir, moduleName, shared, generics):
 def compile(env, jccPath, output, moduleName, install, dist, debug, jars,
             version, prefix, root, install_dir, home_dir, use_distutils,
             shared, compiler, modules, wininst, find_jvm_dll, arch, generics,
-            resources):
+            resources, imports):
 
     try:
         if use_distutils:
@@ -1611,8 +1616,8 @@ def compile(env, jccPath, output, moduleName, install, dist, debug, jars,
     line(out, 1, 'def getJavaException(self):')
     line(out, 2, 'return self.args[0]')
     line(out, 1, 'def __str__(self):')
-    line(out, 2, 'writer = %s.StringWriter()', extname)
-    line(out, 2, 'self.getJavaException().printStackTrace(%s.PrintWriter(writer))', extname)
+    line(out, 2, 'writer = StringWriter()')
+    line(out, 2, 'self.getJavaException().printStackTrace(PrintWriter(writer))')
     line(out, 2, 'return "\\n".join((super(JavaError, self).__str__(), "    Java stacktrace:", str(writer)))')
     line(out)
     line(out, 0, 'class InvalidArgsError(Exception):')
@@ -1632,11 +1637,15 @@ def compile(env, jccPath, output, moduleName, install, dist, debug, jars,
          extname, extname, extname)
 
     line(out)
+    for import_ in imports:
+        line(out, 0, 'from %s._%s import *', import_.__name__, import_.__name__)
     line(out, 0, 'from %s import *', extname)
     out.close()
 
     includes = [os.path.join(output, extname),
                 os.path.join(jccPath, 'sources')]
+    for import_ in imports:
+        includes.append(os.path.join(import_.__dir__, 'include'))
 
     sources = ['JObject.cpp', 'JArray.cpp', 'functions.cpp', 'types.cpp']
     if not shared:
@@ -1645,6 +1654,25 @@ def compile(env, jccPath, output, moduleName, install, dist, debug, jars,
     for source in sources:
 	shutil.copy2(os.path.join(jccPath, 'sources', source),
                      os.path.join(output, extname))
+
+    if shared:
+        def copytree(src, dst):
+            _dst = os.path.join(modulePath, dst)
+            if not os.path.exists(_dst):
+                os.mkdir(_dst)
+            for name in os.listdir(src):
+                if name.startswith('.'):
+                    continue
+                _src = os.path.join(src, name)
+                if os.path.islink(_src):
+                    continue
+                _dst = os.path.join(dst, name)
+                if os.path.isdir(_src):
+                    copytree(_src, _dst)
+                elif name.endswith('.h'):
+                    shutil.copy2(_src, os.path.join(modulePath, _dst))
+                    package_data.append(_dst)
+        copytree(os.path.join(output, extname), 'include')
 
     sources = []
     for path, dirs, names in os.walk(os.path.join(output, extname)):
