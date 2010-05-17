@@ -18,6 +18,7 @@
 
 try:
     from icu import Transliterator, UTransDirection
+    from lucene.ICUTransformFilter import ICUTransformFilter
 except ImportError, e:
     pass
 
@@ -25,7 +26,6 @@ from unittest import main
 from BaseTokenStreamTestCase import BaseTokenStreamTestCase
 
 from lucene import *
-from lucene.ICUTransformFilter import ICUTransformFilter
 
 
 class TestICUTransformFilter(BaseTokenStreamTestCase):
