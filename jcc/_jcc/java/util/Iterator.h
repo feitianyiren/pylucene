@@ -54,11 +54,13 @@ namespace java {
             }
 #endif
             static PyObject *wrap_Object(const Iterator& object);
+            static PyObject *wrap_jobject(const jobject& object);
 #ifdef _java_generics
             static PyObject *wrap_Object(const Iterator& object,
                                          PyTypeObject *T);
+            static PyObject *wrap_jobject(const jobject& object,
+                                          PyTypeObject *T);
 #endif
-            static PyObject *wrap_jobject(const jobject& object);
         };
     }
 }

@@ -573,11 +573,12 @@ def python(env, out_h, out, cls, superCls, names, superNames,
 
     line(out_h, indent + 1, 'static PyObject *wrap_Object(const %s&);',
          cppname(names[-1]))
-    if clsParams:
-        line(out_h, indent + 1, 'static PyObject *wrap_Object(const %s&, %s);',
-             cppname(names[-1]),
-             ', '.join(['PyTypeObject *'] * len(clsParams)))
     line(out_h, indent + 1, 'static PyObject *wrap_jobject(const jobject&);')
+    if clsParams:
+        _clsParams = ', '.join(['PyTypeObject *'] * len(clsParams))
+        line(out_h, indent + 1, 'static PyObject *wrap_Object(const %s&, %s);',
+             cppname(names[-1]), _clsParams)
+        line(out_h, indent + 1, 'static PyObject *wrap_jobject(const jobject&, %s);', _clsParams)
     line(out_h, indent + 1, 'static void install(PyObject *module);')
     line(out_h, indent + 1, 'static void initialize(PyObject *module);')
     line(out_h, indent, '};')
@@ -993,7 +994,7 @@ def python(env, out_h, out, cls, superCls, names, superNames,
         line(out, indent, "{")
         line(out, indent + 1, "PyObject *obj = t_%s::wrap_Object(object);",
              names[-1])
-        line(out, indent + 1, "if (obj != Py_None)")
+        line(out, indent + 1, "if (obj != NULL && obj != Py_None)")
         line(out, indent + 1, "{")
         line(out, indent + 2, "t_%s *self = (t_%s *) obj;",
              names[-1], names[-1])
@@ -1001,6 +1002,27 @@ def python(env, out_h, out, cls, superCls, names, superNames,
         for clsParam in clsParams:
             line(out, indent + 2, "self->parameters[%d] = %s;",
                  i, clsParam.getName())
+            i += 1
+        line(out, indent + 1, "}")
+        line(out, indent + 1, "return obj;");
+        line(out, indent, "}")
+
+        line(out)
+        line(out, indent, 
+             "PyObject *t_%s::wrap_jobject(const jobject& object, %s)",
+             cppname(names[-1]), ', '.join(clsArgs))
+        line(out, indent, "{")
+        line(out, indent + 1, "PyObject *obj = t_%s::wrap_jobject(object);",
+             names[-1])
+        line(out, indent + 1, "if (obj != NULL && obj != Py_None)")
+        line(out, indent + 1, "{")
+        line(out, indent + 2, "t_%s *self = (t_%s *) obj;",
+             names[-1], names[-1])
+        i = 0;
+        for clsParam in clsParams:
+            line(out, indent + 2, "self->parameters[%d] = %s;",
+                 i, clsParam.getName())
+            i += 1
         line(out, indent + 1, "}")
         line(out, indent + 1, "return obj;");
         line(out, indent, "}")

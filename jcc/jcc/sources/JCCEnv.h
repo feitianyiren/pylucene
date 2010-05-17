@@ -87,6 +87,7 @@ protected:
         mid_obj_toString,
         mid_obj_hashCode,
         mid_obj_getClass,
+        mid_iterator,
         mid_iterator_next,
         mid_enumeration_nextElement,
         mid_Boolean_booleanValue,
@@ -152,6 +153,7 @@ public:
     virtual void registerNatives(jclass cls, JNINativeMethod *methods,
                                  int n) const;
 
+    virtual jobject iterator(jobject obj) const;
     virtual jobject iteratorNext(jobject obj) const;
     virtual jobject enumerationNext(jobject obj) const;
 

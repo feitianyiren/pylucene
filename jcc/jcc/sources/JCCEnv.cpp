@@ -111,6 +111,9 @@ void JCCEnv::set_vm(JavaVM *vm, JNIEnv *vm_env)
         vm_env->GetMethodID(_obj, "getClass",
                             "()Ljava/lang/Class;");
 
+    _mids[mid_iterator] =
+        vm_env->GetMethodID(vm_env->FindClass("java/lang/Iterable"),
+                            "iterator", "()Ljava/util/Iterator;");
     _mids[mid_iterator_next] =
         vm_env->GetMethodID(vm_env->FindClass("java/util/Iterator"),
                             "next", "()Ljava/lang/Object;");
@@ -174,6 +177,11 @@ jstring JCCEnv::getJavaVersion() const
     return (jstring)
         callStaticObjectMethod(_sys, _mids[mid_sys_getProperty],
                                get_vm_env()->NewStringUTF("java.version"));
+}
+
+jobject JCCEnv::iterator(jobject obj) const
+{
+    return callObjectMethod(obj, _mids[mid_iterator]);
 }
 
 jobject JCCEnv::iteratorNext(jobject obj) const
