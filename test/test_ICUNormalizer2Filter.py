@@ -18,7 +18,6 @@
 
 try:
     from icu import Normalizer2, UNormalizationMode2
-    from lucene.ICUNormalizer2Filter import ICUNormalizer2Filter
 except ImportError, e:
     pass
 
@@ -31,6 +30,8 @@ from lucene import *
 class TestICUNormalizer2Filter(BaseTokenStreamTestCase):
 
     def testDefaults(self):
+
+        from lucene.ICUNormalizer2Filter import ICUNormalizer2Filter
 
         class analyzer(PythonAnalyzer):
             def tokenStream(_self, fieldName, reader):
@@ -59,6 +60,8 @@ class TestICUNormalizer2Filter(BaseTokenStreamTestCase):
         self._assertAnalyzesTo(a, u"क्‍ष", [ u"क्ष" ])
   
     def testAlternate(self):
+
+        from lucene.ICUNormalizer2Filter import ICUNormalizer2Filter
 
         class analyzer(PythonAnalyzer):
             # specify nfc with decompose to get nfd

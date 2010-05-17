@@ -18,7 +18,6 @@
 
 try:
     from icu import Normalizer2, UNormalizationMode2
-    from lucene.ICUFoldingFilter import ICUFoldingFilter
 except ImportError, e:
     pass
 
@@ -31,6 +30,8 @@ from lucene import *
 class TestICUFoldingFilter(BaseTokenStreamTestCase):
 
     def testDefaults(self):
+
+        from lucene.ICUFoldingFilter import ICUFoldingFilter
 
         class _analyzer(PythonAnalyzer):
             def tokenStream(_self, fieldName, reader):

@@ -18,7 +18,6 @@
 
 try:
     from icu import Transliterator, UTransDirection
-    from lucene.ICUTransformFilter import ICUTransformFilter
 except ImportError, e:
     pass
 
@@ -32,6 +31,7 @@ class TestICUTransformFilter(BaseTokenStreamTestCase):
   
     def _checkToken(self, transform, input, expected):
 
+        from lucene.ICUTransformFilter import ICUTransformFilter
         ts = ICUTransformFilter(KeywordTokenizer(StringReader(input)),
                                 transform)
         self._assertTokenStreamContents(ts, [ expected ])
