@@ -340,17 +340,50 @@ _DLL_EXPORT PyObject *initVM(PyObject *self, PyObject *args, PyObject *kwds)
 {
     static char *kwnames[] = {
         "classpath", "initialheap", "maxheap", "maxstack",
-        "vmargs", NULL
+        "vmargs", "export", NULL
     };
     char *classpath = NULL;
     char *initialheap = NULL, *maxheap = NULL, *maxstack = NULL;
     char *vmargs = NULL;
+    int export_ = 0;
 
-    if (!PyArg_ParseTupleAndKeywords(args, kwds, "|zzzzz", kwnames,
+    if (!PyArg_ParseTupleAndKeywords(args, kwds, "|zzzzzi", kwnames,
                                      &classpath,
                                      &initialheap, &maxheap, &maxstack,
-                                     &vmargs))
+                                     &vmargs, &export_))
         return NULL;
+
+#ifdef linux
+    if (export_)
+    {
+        PyObject *__file__ = PyObject_GetAttrString(self, "__file__");
+
+        if (!__file__)
+            return NULL;
+
+        if (PyString_Check(__file__))
+        {
+            if (!dlopen(PyString_AS_STRING(__file__), RTLD_NOW | RTLD_GLOBAL))
+            {
+                PyErr_Format(PyExc_SystemError,
+                             "dlopen(%s, RTLD_NOW | RTLD_GLOBAL) failed",
+                             PyString_AS_STRING(__file__));
+                Py_DECREF(__file__);
+
+                return NULL;
+            }
+        }
+        else
+        {
+            PyErr_SetString(PyExc_TypeError, "__file__ is not a string");
+            Py_DECREF(__file__);
+
+            return NULL;
+        }
+         
+        Py_DECREF(__file__);
+    }
+#endif
 
     if (env->vm)
     {
