@@ -36,7 +36,7 @@ namespace java {
             jshort shortValue() const;
         };
 
-        extern PyTypeObject Short$$Type;
+        extern PyTypeObject TYPE_NAME(Short);
 
         class t_Short {
         public:

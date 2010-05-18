@@ -53,10 +53,11 @@
 #define DECLARE_GETSET_FIELD(type, name)        \
     { #name, (getter) type##_get__##name, (setter) type##_set__##name, "", NULL }
 
+#define TYPE_NAME(name) name##$$Type
 
 #define DECLARE_TYPE(name, t_name, base, javaClass,                         \
                      init, iter, iternext, getset, mapping, sequence)       \
-PyTypeObject name##$$Type = {                                               \
+PyTypeObject TYPE_NAME(name) = {                                            \
     PyObject_HEAD_INIT(NULL)                                                \
     /* ob_size            */   0,                                           \
     /* tp_name            */   #name,                                       \
@@ -88,7 +89,7 @@ PyTypeObject name##$$Type = {                                               \
     /* tp_methods         */   t_name##__methods_,                          \
     /* tp_members         */   0,                                           \
     /* tp_getset          */   getset,                                      \
-    /* tp_base            */   &base##$$Type,                               \
+    /* tp_base            */   &TYPE_NAME(base),                            \
     /* tp_dict            */   0,                                           \
     /* tp_descr_get       */   0,                                           \
     /* tp_descr_set       */   0,                                           \
@@ -102,7 +103,7 @@ PyObject *t_name::wrap_Object(const javaClass& object)                  \
     if (!!object)                                                       \
     {                                                                   \
         t_name *self =                                                  \
-            (t_name *) name##$$Type.tp_alloc(&name##$$Type, 0);         \
+            (t_name *) TYPE_NAME(name).tp_alloc(&TYPE_NAME(name), 0);   \
         if (self)                                                       \
             self->object = object;                                      \
         return (PyObject *) self;                                       \
@@ -116,11 +117,11 @@ PyObject *t_name::wrap_jobject(const jobject& object)                   \
         if (!env->isInstanceOf(object, javaClass::initializeClass))     \
         {                                                               \
             PyErr_SetObject(PyExc_TypeError,                            \
-                            (PyObject *) &name##$$Type);                \
+                            (PyObject *) &TYPE_NAME(name));             \
             return NULL;                                                \
         }                                                               \
         t_name *self = (t_name *)                                       \
-            name##$$Type.tp_alloc(&name##$$Type, 0);                    \
+            TYPE_NAME(name).tp_alloc(&TYPE_NAME(name), 0);              \
         if (self)                                                       \
             self->object = javaClass(object);                           \
         return (PyObject *) self;                                       \
@@ -129,11 +130,11 @@ PyObject *t_name::wrap_jobject(const jobject& object)                   \
 }                                                                       \
 
 
-#define INSTALL_TYPE(name, module)                                     \
-    if (PyType_Ready(&name##$$Type) == 0)                              \
-    {                                                                  \
-        Py_INCREF(&name##$$Type);                                      \
-        PyModule_AddObject(module, #name, (PyObject *) &name##$$Type); \
+#define INSTALL_TYPE(name, module)                                        \
+    if (PyType_Ready(&TYPE_NAME(name)) == 0)                              \
+    {                                                                     \
+        Py_INCREF(&TYPE_NAME(name));                                      \
+        PyModule_AddObject(module, #name, (PyObject *) &TYPE_NAME(name)); \
     }
 
 

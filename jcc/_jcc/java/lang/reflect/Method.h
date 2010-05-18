@@ -54,7 +54,7 @@ namespace java {
 #endif
             };
 
-            extern PyTypeObject Method$$Type;
+            extern PyTypeObject TYPE_NAME(Method);
 
             class t_Method {
             public:

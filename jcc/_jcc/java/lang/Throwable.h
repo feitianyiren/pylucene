@@ -44,7 +44,7 @@ namespace java {
             String getMessage() const;
         };
 
-        extern PyTypeObject Throwable$$Type;
+        extern PyTypeObject TYPE_NAME(Throwable);
 
         class t_Throwable {
         public:

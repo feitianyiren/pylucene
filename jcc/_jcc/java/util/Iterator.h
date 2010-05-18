@@ -40,7 +40,7 @@ namespace java {
             Object next() const;
         };
 
-        extern PyTypeObject Iterator$$Type;
+        extern PyTypeObject TYPE_NAME(Iterator);
 
         class t_Iterator {
         public:

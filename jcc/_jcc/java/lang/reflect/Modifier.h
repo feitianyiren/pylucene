@@ -44,7 +44,7 @@ namespace java {
                 static int isProtected(int mod);
             };
 
-            extern PyTypeObject Modifier$$Type;
+            extern PyTypeObject TYPE_NAME(Modifier);
 
             class t_Modifier {
             public:

@@ -1,6 +1,4 @@
 /*
- *   Copyright (c) 2007-2008 Open Source Applications Foundation
- *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
  *   You may obtain a copy of the License at
@@ -24,16 +22,16 @@
 extern jobjectArray fromPySequence(jclass cls, PyObject *sequence);
 extern PyObject *PyErr_SetJavaError(jthrowable throwable);
 
-extern PyTypeObject *JArrayObject$$Type;
-extern PyTypeObject *JArrayString$$Type;
-extern PyTypeObject *JArrayBool$$Type;
-extern PyTypeObject *JArrayByte$$Type;
-extern PyTypeObject *JArrayChar$$Type;
-extern PyTypeObject *JArrayDouble$$Type;
-extern PyTypeObject *JArrayFloat$$Type;
-extern PyTypeObject *JArrayInt$$Type;
-extern PyTypeObject *JArrayLong$$Type;
-extern PyTypeObject *JArrayShort$$Type;
+extern PyTypeObject *TYPE_NAME(JArrayObject);
+extern PyTypeObject *TYPE_NAME(JArrayString);
+extern PyTypeObject *TYPE_NAME(JArrayBool);
+extern PyTypeObject *TYPE_NAME(JArrayByte);
+extern PyTypeObject *TYPE_NAME(JArrayChar);
+extern PyTypeObject *TYPE_NAME(JArrayDouble);
+extern PyTypeObject *TYPE_NAME(JArrayFloat);
+extern PyTypeObject *TYPE_NAME(JArrayInt);
+extern PyTypeObject *TYPE_NAME(JArrayLong);
+extern PyTypeObject *TYPE_NAME(JArrayShort);
 
 #endif
 
@@ -181,7 +179,7 @@ template<> class JArray<jobject> : public java::lang::Object {
 
             if (n >= 0 && n < length)
             {
-                if (!PyObject_TypeCheck(obj, &JObject$$Type))
+                if (!PyObject_TypeCheck(obj, &TYPE_NAME(JObject)))
                 {
                     PyErr_SetObject(PyExc_TypeError, obj);
                     return -1;

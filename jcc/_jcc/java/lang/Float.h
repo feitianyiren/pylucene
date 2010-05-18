@@ -36,7 +36,7 @@ namespace java {
             jfloat floatValue() const;
         };
 
-        extern PyTypeObject Float$$Type;
+        extern PyTypeObject TYPE_NAME(Float);
 
         class t_Float {
         public:

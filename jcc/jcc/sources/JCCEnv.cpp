@@ -690,7 +690,7 @@ void JCCEnv::setClassPath(const char *classPath)
     jmethodID mf = vm_env->GetMethodID(_fil, "<init>", "(Ljava/lang/String;)V");
     jmethodID mu = vm_env->GetMethodID(_fil, "toURL", "()Ljava/net/URL;");
     jmethodID ma = vm_env->GetMethodID(_ucl, "addURL", "(Ljava/net/URL;)V");
-#ifdef WINDOWS
+#if defined(_MSC_VER) || defined(__WIN32)
     char *pathsep = ";";
 #else
     char *pathsep = ":";
@@ -719,7 +719,7 @@ char *JCCEnv::getClassPath()
     jobject classLoader = vm_env->CallStaticObjectMethod(_ucl, mid);
     jmethodID gu = vm_env->GetMethodID(_ucl, "getURLs", "()[Ljava/net/URL;");
     jmethodID gp = vm_env->GetMethodID(_url, "getPath", "()Ljava/lang/String;");
-#ifdef WINDOWS
+#if defined(_MSC_VER) || defined(__WIN32)
     char *pathsep = ";";
 #else
     char *pathsep = ":";

@@ -39,7 +39,7 @@ namespace java {
             static Boolean *FALSE;
         };
 
-        extern PyTypeObject Boolean$$Type;
+        extern PyTypeObject TYPE_NAME(Boolean);
 
         class t_Boolean {
         public:

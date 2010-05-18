@@ -233,7 +233,7 @@ int _parseArgs(PyObject **args, unsigned int count, char *types, ...)
 
               if (array)
               {
-                  if (PyObject_TypeCheck(arg, JArrayObject$$Type))
+                  if (PyObject_TypeCheck(arg, TYPE_NAME(JArrayObject)))
                       break;
 
                   if (PySequence_Check(arg) &&
@@ -246,14 +246,14 @@ int _parseArgs(PyObject **args, unsigned int count, char *types, ...)
 
                           if (obj == Py_None)
                               ok = 1;
-                          else if (PyObject_TypeCheck(obj, &Object$$Type) &&
+                          else if (PyObject_TypeCheck(obj, &TYPE_NAME(Object)) &&
                                    vm_env->IsInstanceOf(((t_Object *) obj)->object.this$, cls))
                               ok = 1;
-                          else if (PyObject_TypeCheck(obj, &FinalizerProxy$$Type))
+                          else if (PyObject_TypeCheck(obj, &TYPE_NAME(FinalizerProxy)))
                           {
                               PyObject *o = ((t_fp *) obj)->object;
 
-                              if (PyObject_TypeCheck(o, &Object$$Type) &&
+                              if (PyObject_TypeCheck(o, &TYPE_NAME(Object)) &&
                                   vm_env->IsInstanceOf(((t_Object *) o)->object.this$, cls))
                                   ok = 1;
                           }
@@ -266,13 +266,13 @@ int _parseArgs(PyObject **args, unsigned int count, char *types, ...)
                           break;
                   }
               }
-              else if (PyObject_TypeCheck(arg, &Object$$Type) &&
+              else if (PyObject_TypeCheck(arg, &TYPE_NAME(Object)) &&
                        vm_env->IsInstanceOf(((t_Object *) arg)->object.this$, cls))
                   break;
-              else if (PyObject_TypeCheck(arg, &FinalizerProxy$$Type))
+              else if (PyObject_TypeCheck(arg, &TYPE_NAME(FinalizerProxy)))
               {
                   arg = ((t_fp *) arg)->object;
-                  if (PyObject_TypeCheck(arg, &Object$$Type) &&
+                  if (PyObject_TypeCheck(arg, &TYPE_NAME(Object)) &&
                       vm_env->IsInstanceOf(((t_Object *) arg)->object.this$, cls))
                       break;
               }
@@ -287,7 +287,7 @@ int _parseArgs(PyObject **args, unsigned int count, char *types, ...)
                   if (arg == Py_None)
                       break;
 
-                  if (PyObject_TypeCheck(arg, JArrayBool$$Type))
+                  if (PyObject_TypeCheck(arg, TYPE_NAME(JArrayBool)))
                       break;
 
                   if (PySequence_Check(arg))
@@ -317,7 +317,7 @@ int _parseArgs(PyObject **args, unsigned int count, char *types, ...)
               {
                   if (arg == Py_None)
                       break;
-                  if (PyObject_TypeCheck(arg, JArrayByte$$Type))
+                  if (PyObject_TypeCheck(arg, TYPE_NAME(JArrayByte)))
                       break;
               }
               else if (PyString_Check(arg) && (PyString_Size(arg) == 1))
@@ -334,7 +334,7 @@ int _parseArgs(PyObject **args, unsigned int count, char *types, ...)
               {
                   if (arg == Py_None)
                       break;
-                  if (PyObject_TypeCheck(arg, JArrayChar$$Type))
+                  if (PyObject_TypeCheck(arg, TYPE_NAME(JArrayChar)))
                       break;
               }
               else if (PyUnicode_Check(arg) && PyUnicode_GET_SIZE(arg) == 1)
@@ -349,7 +349,7 @@ int _parseArgs(PyObject **args, unsigned int count, char *types, ...)
                   if (arg == Py_None)
                       break;
 
-                  if (PyObject_TypeCheck(arg, JArrayInt$$Type))
+                  if (PyObject_TypeCheck(arg, TYPE_NAME(JArrayInt)))
                       break;
 
                   if (PySequence_Check(arg))
@@ -380,7 +380,7 @@ int _parseArgs(PyObject **args, unsigned int count, char *types, ...)
                   if (arg == Py_None)
                       break;
 
-                  if (PyObject_TypeCheck(arg, JArrayShort$$Type))
+                  if (PyObject_TypeCheck(arg, TYPE_NAME(JArrayShort)))
                       break;
 
                   if (PySequence_Check(arg))
@@ -411,7 +411,7 @@ int _parseArgs(PyObject **args, unsigned int count, char *types, ...)
                   if (arg == Py_None)
                       break;
 
-                  if (PyObject_TypeCheck(arg, JArrayDouble$$Type))
+                  if (PyObject_TypeCheck(arg, TYPE_NAME(JArrayDouble)))
                       break;
 
                   if (PySequence_Check(arg))
@@ -442,7 +442,7 @@ int _parseArgs(PyObject **args, unsigned int count, char *types, ...)
                   if (arg == Py_None)
                       break;
 
-                  if (PyObject_TypeCheck(arg, JArrayFloat$$Type))
+                  if (PyObject_TypeCheck(arg, TYPE_NAME(JArrayFloat)))
                       break;
 
                   if (PySequence_Check(arg))
@@ -473,7 +473,7 @@ int _parseArgs(PyObject **args, unsigned int count, char *types, ...)
                   if (arg == Py_None)
                       break;
 
-                  if (PyObject_TypeCheck(arg, JArrayLong$$Type))
+                  if (PyObject_TypeCheck(arg, TYPE_NAME(JArrayLong)))
                       break;
 
                   if (PySequence_Check(arg))
@@ -504,7 +504,7 @@ int _parseArgs(PyObject **args, unsigned int count, char *types, ...)
                   if (arg == Py_None)
                       break;
 
-                  if (PyObject_TypeCheck(arg, JArrayString$$Type))
+                  if (PyObject_TypeCheck(arg, TYPE_NAME(JArrayString)))
                       break;
 
                   if (PySequence_Check(arg) && 
@@ -630,7 +630,7 @@ int _parseArgs(PyObject **args, unsigned int count, char *types, ...)
 #endif
                   if (arg == Py_None)
                       *array = JArray<jobject>((jobject) NULL);
-                  else if (PyObject_TypeCheck(arg, JArrayObject$$Type))
+                  else if (PyObject_TypeCheck(arg, TYPE_NAME(JArrayObject)))
                       *array = ((t_jarray<jobject> *) arg)->array;
                   else 
                       *array = JArray<jobject>(cls, arg);
@@ -642,7 +642,7 @@ int _parseArgs(PyObject **args, unsigned int count, char *types, ...)
               {
                   Object *obj = va_arg(list, Object *);
 
-                  if (PyObject_TypeCheck(arg, &FinalizerProxy$$Type))
+                  if (PyObject_TypeCheck(arg, &TYPE_NAME(FinalizerProxy)))
                       arg = ((t_fp *) arg)->object;
 
 #ifdef _java_generics
@@ -674,7 +674,7 @@ int _parseArgs(PyObject **args, unsigned int count, char *types, ...)
 
                   if (arg == Py_None)
                       *array = JArray<jboolean>((jobject) NULL);
-                  else if (PyObject_TypeCheck(arg, JArrayBool$$Type))
+                  else if (PyObject_TypeCheck(arg, TYPE_NAME(JArrayBool)))
                       *array = ((t_jarray<jboolean> *) arg)->array;
                   else
                       *array = JArray<jboolean>(arg);
@@ -698,7 +698,7 @@ int _parseArgs(PyObject **args, unsigned int count, char *types, ...)
 
                   if (arg == Py_None)
                       *array = JArray<jbyte>((jobject) NULL);
-                  else if (PyObject_TypeCheck(arg, JArrayByte$$Type))
+                  else if (PyObject_TypeCheck(arg, TYPE_NAME(JArrayByte)))
                       *array = ((t_jarray<jbyte> *) arg)->array;
                   else 
                       *array = JArray<jbyte>(arg);
@@ -727,7 +727,7 @@ int _parseArgs(PyObject **args, unsigned int count, char *types, ...)
 
                   if (arg == Py_None)
                       *array = JArray<jchar>((jobject) NULL);
-                  else if (PyObject_TypeCheck(arg, JArrayChar$$Type))
+                  else if (PyObject_TypeCheck(arg, TYPE_NAME(JArrayChar)))
                       *array = ((t_jarray<jchar> *) arg)->array;
                   else 
                       *array = JArray<jchar>(arg);
@@ -751,7 +751,7 @@ int _parseArgs(PyObject **args, unsigned int count, char *types, ...)
 
                   if (arg == Py_None)
                       *array = JArray<jint>((jobject) NULL);
-                  else if (PyObject_TypeCheck(arg, JArrayInt$$Type))
+                  else if (PyObject_TypeCheck(arg, TYPE_NAME(JArrayInt)))
                       *array = ((t_jarray<jint> *) arg)->array;
                   else 
                       *array = JArray<jint>(arg);
@@ -775,7 +775,7 @@ int _parseArgs(PyObject **args, unsigned int count, char *types, ...)
 
                   if (arg == Py_None)
                       *array = JArray<jshort>((jobject) NULL);
-                  else if (PyObject_TypeCheck(arg, JArrayShort$$Type))
+                  else if (PyObject_TypeCheck(arg, TYPE_NAME(JArrayShort)))
                       *array = ((t_jarray<jshort> *) arg)->array;
                   else 
                       *array = JArray<jshort>(arg);
@@ -799,7 +799,7 @@ int _parseArgs(PyObject **args, unsigned int count, char *types, ...)
 
                   if (arg == Py_None)
                       *array = JArray<jdouble>((jobject) NULL);
-                  else if (PyObject_TypeCheck(arg, JArrayDouble$$Type))
+                  else if (PyObject_TypeCheck(arg, TYPE_NAME(JArrayDouble)))
                       *array = ((t_jarray<jdouble> *) arg)->array;
                   else 
                       *array = JArray<jdouble>(arg);
@@ -823,7 +823,7 @@ int _parseArgs(PyObject **args, unsigned int count, char *types, ...)
 
                   if (arg == Py_None)
                       *array = JArray<jfloat>((jobject) NULL);
-                  else if (PyObject_TypeCheck(arg, JArrayFloat$$Type))
+                  else if (PyObject_TypeCheck(arg, TYPE_NAME(JArrayFloat)))
                       *array = ((t_jarray<jfloat> *) arg)->array;
                   else 
                       *array = JArray<jfloat>(arg);
@@ -847,7 +847,7 @@ int _parseArgs(PyObject **args, unsigned int count, char *types, ...)
 
                   if (arg == Py_None)
                       *array = JArray<jlong>((jobject) NULL);
-                  else if (PyObject_TypeCheck(arg, JArrayLong$$Type))
+                  else if (PyObject_TypeCheck(arg, TYPE_NAME(JArrayLong)))
                       *array = ((t_jarray<jlong> *) arg)->array;
                   else 
                       *array = JArray<jlong>(arg);
@@ -871,7 +871,7 @@ int _parseArgs(PyObject **args, unsigned int count, char *types, ...)
 
                   if (arg == Py_None)
                       *array = JArray<jstring>((jobject) NULL);
-                  else if (PyObject_TypeCheck(arg, JArrayString$$Type))
+                  else if (PyObject_TypeCheck(arg, TYPE_NAME(JArrayString)))
                       *array = ((t_jarray<jstring> *) arg)->array;
                   else 
                       *array = JArray<jstring>(arg);
@@ -1048,7 +1048,7 @@ void throwPythonError(void)
                 Py_XDECREF(traceback);
                 exc = je;
 
-                if (exc && PyObject_TypeCheck(exc, &Throwable$$Type))
+                if (exc && PyObject_TypeCheck(exc, &TYPE_NAME(Throwable)))
                 {
                     jobject jobj = ((t_Throwable *) exc)->object.this$;
 
@@ -1175,10 +1175,10 @@ PyObject *callSuper(PyTypeObject *type, PyObject *self,
 PyObject *castCheck(PyObject *obj, getclassfn initializeClass,
                     int reportError)
 {
-    if (PyObject_TypeCheck(obj, &FinalizerProxy$$Type))
+    if (PyObject_TypeCheck(obj, &TYPE_NAME(FinalizerProxy)))
         obj = ((t_fp *) obj)->object;
 
-    if (!PyObject_TypeCheck(obj, &Object$$Type))
+    if (!PyObject_TypeCheck(obj, &TYPE_NAME(Object)))
     {
         if (reportError)
             PyErr_SetObject(PyExc_TypeError, obj);
@@ -1252,9 +1252,9 @@ jobjectArray fromPySequence(jclass cls, PyObject *sequence)
             jobj = env->fromPyString(obj);
             fromString = 1;
         }
-        else if (PyObject_TypeCheck(obj, &JObject$$Type))
+        else if (PyObject_TypeCheck(obj, &TYPE_NAME(JObject)))
             jobj = ((t_JObject *) obj)->object.this$;
-        else if (PyObject_TypeCheck(obj, &FinalizerProxy$$Type))
+        else if (PyObject_TypeCheck(obj, &TYPE_NAME(FinalizerProxy)))
             jobj = ((t_JObject *) ((t_fp *) obj)->object)->object.this$;
         else /* todo: add auto-boxing of primitive types */
         {
@@ -1286,8 +1286,8 @@ void installType(PyTypeObject *type, PyObject *module, char *name,
         Py_INCREF(type);
         if (isExtension)
         {
-            type->ob_type = &FinalizerClass$$Type;
-            Py_INCREF(&FinalizerClass$$Type);
+            type->ob_type = &TYPE_NAME(FinalizerClass);
+            Py_INCREF(&TYPE_NAME(FinalizerClass));
         }
         PyModule_AddObject(module, name, (PyObject *) type);
     }
@@ -1315,7 +1315,7 @@ PyObject *unboxBoolean(const jobject& obj)
         if (!env->isInstanceOf(obj, java::lang::Boolean::initializeClass))
         {
             PyErr_SetObject(PyExc_TypeError,
-                            (PyObject *) &java::lang::Boolean$$Type);
+                            (PyObject *) &java::lang::TYPE_NAME(Boolean));
             return NULL;
         }
         
@@ -1335,7 +1335,7 @@ PyObject *unboxByte(const jobject &obj)
         if (!env->isInstanceOf(obj, java::lang::Byte::initializeClass))
         {
             PyErr_SetObject(PyExc_TypeError,
-                            (PyObject *) &java::lang::Byte$$Type);
+                            (PyObject *) &java::lang::TYPE_NAME(Byte));
             return NULL;
         }
         
@@ -1352,7 +1352,7 @@ PyObject *unboxCharacter(const jobject &obj)
         if (!env->isInstanceOf(obj, java::lang::Character::initializeClass))
         {
             PyErr_SetObject(PyExc_TypeError,
-                            (PyObject *) &java::lang::Character$$Type);
+                            (PyObject *) &java::lang::TYPE_NAME(Character));
             return NULL;
         }
         
@@ -1370,7 +1370,7 @@ PyObject *unboxDouble(const jobject &obj)
         if (!env->isInstanceOf(obj, java::lang::Double::initializeClass))
         {
             PyErr_SetObject(PyExc_TypeError,
-                            (PyObject *) &java::lang::Double$$Type);
+                            (PyObject *) &java::lang::TYPE_NAME(Double));
             return NULL;
         }
         
@@ -1387,7 +1387,7 @@ PyObject *unboxFloat(const jobject &obj)
         if (!env->isInstanceOf(obj, java::lang::Float::initializeClass))
         {
             PyErr_SetObject(PyExc_TypeError,
-                            (PyObject *) &java::lang::Float$$Type);
+                            (PyObject *) &java::lang::TYPE_NAME(Float));
             return NULL;
         }
         
@@ -1404,7 +1404,7 @@ PyObject *unboxInteger(const jobject &obj)
         if (!env->isInstanceOf(obj, java::lang::Integer::initializeClass))
         {
             PyErr_SetObject(PyExc_TypeError,
-                            (PyObject *) &java::lang::Integer$$Type);
+                            (PyObject *) &java::lang::TYPE_NAME(Integer));
             return NULL;
         }
         
@@ -1421,7 +1421,7 @@ PyObject *unboxLong(const jobject &obj)
         if (!env->isInstanceOf(obj, java::lang::Long::initializeClass))
         {
             PyErr_SetObject(PyExc_TypeError,
-                            (PyObject *) &java::lang::Long$$Type);
+                            (PyObject *) &java::lang::TYPE_NAME(Long));
             return NULL;
         }
         
@@ -1438,7 +1438,7 @@ PyObject *unboxShort(const jobject &obj)
         if (!env->isInstanceOf(obj, java::lang::Short::initializeClass))
         {
             PyErr_SetObject(PyExc_TypeError,
-                            (PyObject *) &java::lang::Short$$Type);
+                            (PyObject *) &java::lang::TYPE_NAME(Short));
             return NULL;
         }
         
@@ -1455,7 +1455,7 @@ PyObject *unboxString(const jobject &obj)
         if (!env->isInstanceOf(obj, java::lang::String::initializeClass))
         {
             PyErr_SetObject(PyExc_TypeError,
-                            (PyObject *) &java::lang::String$$Type);
+                            (PyObject *) &java::lang::TYPE_NAME(String));
             return NULL;
         }
         
@@ -1473,7 +1473,7 @@ static int boxJObject(PyTypeObject *type, PyObject *arg,
         if (obj != NULL)
             *obj = Object(NULL);
     }
-    else if (PyObject_TypeCheck(arg, &Object$$Type))
+    else if (PyObject_TypeCheck(arg, &TYPE_NAME(Object)))
     {
         if (type != NULL && !is_instance_of(arg, type))
             return -1;
@@ -1481,10 +1481,10 @@ static int boxJObject(PyTypeObject *type, PyObject *arg,
         if (obj != NULL)
             *obj = ((t_Object *) arg)->object;
     }
-    else if (PyObject_TypeCheck(arg, &FinalizerProxy$$Type))
+    else if (PyObject_TypeCheck(arg, &TYPE_NAME(FinalizerProxy)))
     {
         arg = ((t_fp *) arg)->object;
-        if (PyObject_TypeCheck(arg, &Object$$Type))
+        if (PyObject_TypeCheck(arg, &TYPE_NAME(Object)))
         {
             if (type != NULL && !is_instance_of(arg, type))
                 return -1;

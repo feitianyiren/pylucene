@@ -78,7 +78,7 @@ static PyMethodDef t_jccenv_methods[] = {
     { NULL, NULL, 0, NULL }
 };
 
-PyTypeObject JCCEnv$$Type = {
+PyTypeObject TYPE_NAME(JCCEnv) = {
     PyObject_HEAD_INIT(NULL)
     0,                                   /* ob_size */
     "jcc.JCCEnv",                        /* tp_name */
@@ -314,7 +314,7 @@ _DLL_EXPORT PyObject *getVMEnv(PyObject *self)
 {
     if (env->vm != NULL)
     {
-        t_jccenv *jccenv = (t_jccenv *) JCCEnv$$Type.tp_alloc(&JCCEnv$$Type, 0);
+        t_jccenv *jccenv = (t_jccenv *) TYPE_NAME(JCCEnv).tp_alloc(&TYPE_NAME(JCCEnv), 0);
         jccenv->env = env;
 
         return (PyObject *) jccenv;
@@ -519,7 +519,7 @@ _DLL_EXPORT PyObject *initVM(PyObject *self, PyObject *args, PyObject *kwds)
         for (unsigned int i = 0; i < nOptions; i++)
             delete vm_options[i].optionString;
 
-        t_jccenv *jccenv = (t_jccenv *) JCCEnv$$Type.tp_alloc(&JCCEnv$$Type, 0);
+        t_jccenv *jccenv = (t_jccenv *) TYPE_NAME(JCCEnv).tp_alloc(&TYPE_NAME(JCCEnv), 0);
         jccenv->env = env;
 
 #ifdef _jcc_lib

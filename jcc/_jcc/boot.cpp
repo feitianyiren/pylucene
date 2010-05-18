@@ -18,7 +18,7 @@
 #include "java/lang/RuntimeException.h"
 #include "macros.h"
 
-extern PyTypeObject JObject$$Type, ConstVariableDescriptor$$Type;
+extern PyTypeObject TYPE_NAME(JObject), TYPE_NAME(ConstVariableDescriptor);
 
 PyObject *initJCC(PyObject *module);
 PyObject *initVM(PyObject *self, PyObject *args, PyObject *kwds);

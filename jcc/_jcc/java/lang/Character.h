@@ -36,7 +36,7 @@ namespace java {
             jchar charValue() const;
         };
 
-        extern PyTypeObject Character$$Type;
+        extern PyTypeObject TYPE_NAME(Character);
 
         class t_Character {
         public:

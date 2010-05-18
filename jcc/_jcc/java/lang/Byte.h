@@ -36,7 +36,7 @@ namespace java {
             jbyte byteValue() const;
         };
 
-        extern PyTypeObject Byte$$Type;
+        extern PyTypeObject TYPE_NAME(Byte);
 
         class t_Byte {
         public:

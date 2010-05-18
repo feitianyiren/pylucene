@@ -46,7 +46,7 @@ namespace java {
 #endif
             };
 
-            extern PyTypeObject Field$$Type;
+            extern PyTypeObject TYPE_NAME(Field);
 
             class t_Field {
             public:

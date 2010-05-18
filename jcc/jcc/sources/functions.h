@@ -285,8 +285,8 @@ void installType(PyTypeObject *type, PyObject *module, char *name,
 PyObject *typeParameters(PyTypeObject *types[], size_t size);
 #endif
 
-extern PyTypeObject FinalizerClass$$Type;
-extern PyTypeObject FinalizerProxy$$Type;
+extern PyTypeObject TYPE_NAME(FinalizerClass);
+extern PyTypeObject TYPE_NAME(FinalizerProxy);
 
 typedef struct {
     PyObject_HEAD

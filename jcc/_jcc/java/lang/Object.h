@@ -40,7 +40,7 @@ namespace java {
             jboolean equals(const Object& obj) const;
         };
 
-        extern PyTypeObject Object$$Type;
+        extern PyTypeObject TYPE_NAME(Object);
 
         class t_Object {
         public:

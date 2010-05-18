@@ -141,7 +141,7 @@ def parseArgs(params, current, generics, genericParams=None):
             return ''
         if is_boxed(clsName):
             clsNames = clsName.split('.')
-            return ', &%s::%s$$Type' %('::'.join(cppnames(clsNames[:-1])), cppname(clsNames[-1]))
+            return ', &%s::TYPE_NAME(%s)' %('::'.join(cppnames(clsNames[:-1])), cppname(clsNames[-1]))
         return ', %s::initializeClass' %(typename(cls, current, False))
 
     def callarg(cls, i):
@@ -288,7 +288,7 @@ def returnValue(cls, returnType, value, genericRT=None, typeParams=None):
             for clsArg in getActualTypeArguments(genericRT):
                 if Class.instance_(clsArg):
                     clsNames = Class.cast_(clsArg).getName().split('.')
-                    clsArg = '&%s::%s$$Type' %('::'.join(cppnames(clsNames[:-1])), cppname(clsNames[-1]))
+                    clsArg = '&%s::TYPE_NAME(%s)' %('::'.join(cppnames(clsNames[:-1])), cppname(clsNames[-1]))
                     clsArgs.append(clsArg)
                 elif TypeVariable.instance_(clsArg):
                     gd = TypeVariable.cast_(clsArg).getGenericDeclaration()
@@ -380,7 +380,7 @@ def call(out, indent, cls, inCase, method, names, cardinality, isExtension,
     if isExtension and name == 'clone' and Modifier.isNative(modifiers):
         line(out)
         line(out, indent, '%s object(result.this$);', typename(cls, cls, False))
-        line(out, indent, 'if (PyObject_TypeCheck(arg, &FinalizerProxy$$Type) &&')
+        line(out, indent, 'if (PyObject_TypeCheck(arg, &TYPE_NAME(FinalizerProxy)) &&')
         line(out, indent, '    PyObject_TypeCheck(((t_fp *) arg)->object, self->ob_type))')
         line(out, indent, '{')
         line(out, indent + 1, 'PyObject *_arg = ((t_fp *) arg)->object;')
@@ -551,7 +551,7 @@ def python(env, out_h, out, cls, superCls, names, superNames,
     for name in names[:-1]:
         line(out_h, indent, 'namespace %s {', cppname(name))
         indent += 1
-    line(out_h, indent, 'extern PyTypeObject %s$$Type;', names[-1])
+    line(out_h, indent, 'extern PyTypeObject TYPE_NAME(%s);', names[-1])
 
     if generics:
         clsParams = getTypeParameters(cls)
@@ -1030,20 +1030,20 @@ def python(env, out_h, out, cls, superCls, names, superNames,
     line(out)
     line(out, indent, 'void t_%s::install(PyObject *module)', names[-1])
     line(out, indent, '{')
-    line(out, indent + 1, 'installType(&%s$$Type, module, "%s", %d);',
+    line(out, indent + 1, 'installType(&TYPE_NAME(%s), module, "%s", %d);',
          names[-1], rename or names[-1], isExtension and 1 or 0)
     for inner in cls.getDeclaredClasses():
         if inner in typeset:
             if Modifier.isStatic(inner.getModifiers()):
                 innerName = inner.getName().split('.')[-1]
-                line(out, indent + 1, 'PyDict_SetItemString(%s$$Type.tp_dict, "%s", make_descriptor(&%s$$Type));',
+                line(out, indent + 1, 'PyDict_SetItemString(TYPE_NAME(%s).tp_dict, "%s", make_descriptor(&TYPE_NAME(%s)));',
                      names[-1], innerName[len(names[-1])+1:], innerName)
     line(out, indent, '}')
 
     line(out)
     line(out, indent, 'void t_%s::initialize(PyObject *module)', names[-1])
     line(out, indent, '{')
-    line(out, indent + 1, 'PyDict_SetItemString(%s$$Type.tp_dict, "class_", make_descriptor(%s::initializeClass, %s));',
+    line(out, indent + 1, 'PyDict_SetItemString(TYPE_NAME(%s).tp_dict, "class_", make_descriptor(%s::initializeClass, %s));',
          names[-1], cppname(names[-1]), generics and 1 or 0)
 
     if is_unboxed(cls.getName()):
@@ -1053,8 +1053,8 @@ def python(env, out_h, out, cls, superCls, names, superNames,
         wrapfn_ = "t_%s::wrap_jobject" %(names[-1])
         boxfn_ = "boxObject"
 
-    line(out, indent + 1, 'PyDict_SetItemString(%s$$Type.tp_dict, "wrapfn_", make_descriptor(%s));', names[-1], wrapfn_)
-    line(out, indent + 1, 'PyDict_SetItemString(%s$$Type.tp_dict, "boxfn_", make_descriptor(%s));', names[-1], boxfn_)
+    line(out, indent + 1, 'PyDict_SetItemString(TYPE_NAME(%s).tp_dict, "wrapfn_", make_descriptor(%s));', names[-1], wrapfn_)
+    line(out, indent + 1, 'PyDict_SetItemString(TYPE_NAME(%s).tp_dict, "boxfn_", make_descriptor(%s));', names[-1], boxfn_)
 
     if isExtension:
         line(out, indent + 1, 'jclass cls = %s::initializeClass();',
@@ -1079,7 +1079,7 @@ def python(env, out_h, out, cls, superCls, names, superNames,
         fieldName = field.getName()
         value = '%s::%s' %(cppname(names[-1]), cppname(fieldName))
         value = fieldValue(cls, value, fieldType)
-        line(out, indent + 1, 'PyDict_SetItemString(%s$$Type.tp_dict, "%s", make_descriptor(%s));',
+        line(out, indent + 1, 'PyDict_SetItemString(TYPE_NAME(%s).tp_dict, "%s", make_descriptor(%s));',
              names[-1], fieldName, value)
     line(out, indent, '}')
 
@@ -1197,7 +1197,7 @@ def python(env, out_h, out, cls, superCls, names, superNames,
                     line(out, indent + 1, 'return callSuper(type, "%s"%s, %d);',
                          name, args, cardinality)
                 else:
-                    line(out, indent + 1, 'return callSuper(&%s$$Type, (PyObject *) self, "%s"%s, %d);',
+                    line(out, indent + 1, 'return callSuper(&TYPE_NAME(%s), (PyObject *) self, "%s"%s, %d);',
                          names[-1], name, args, cardinality)
             else:
                 line(out, indent + 1, 'PyErr_SetArgsError(%s, "%s"%s);',
@@ -1514,7 +1514,7 @@ def module(out, allInOne, classes, imports, cppdir, moduleName,
     line(out)
     line(out, 0, 'PyObject *initJCC(PyObject *module);')
     line(out, 0, 'void __install__(PyObject *module);')
-    line(out, 0, 'extern PyTypeObject JObject$$Type, ConstVariableDescriptor$$Type, FinalizerClass$$Type, FinalizerProxy$$Type;')
+    line(out, 0, 'extern PyTypeObject TYPE_NAME(JObject), TYPE_NAME(ConstVariableDescriptor), TYPE_NAME(FinalizerClass), TYPE_NAME(FinalizerProxy);')
     line(out, 0, 'extern void _install_jarray(PyObject *);')
     line(out)
     line(out, 0, 'extern "C" {')

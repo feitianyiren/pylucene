@@ -91,6 +91,7 @@ public:
 #ifdef PYTHON
 
 #include <Python.h>
+#include "macros.h"
 
 class t_JObject {
 public:
@@ -98,7 +99,7 @@ public:
     JObject object;
 };
 
-extern PyTypeObject JObject$$Type;
+extern PyTypeObject TYPE_NAME(JObject);
 
 #endif /* PYTHON */
 
