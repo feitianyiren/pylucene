@@ -81,7 +81,7 @@ PyObject *findClass(PyObject *self, PyObject *args)
 
         if (cls)
             return t_Class::wrap_Object(Class(cls));
-    } catch (JCCEnv::pythonError e) {
+    } catch (JCCEnv::pythonError) {
         return NULL;
     } catch (JCCEnv::exception e) {
         PyErr_SetJavaError(e.throwable);
@@ -213,7 +213,7 @@ int _parseArgs(PyObject **args, unsigned int count, char *types, ...)
                   try {
                       getclassfn initializeClass = va_arg(list, getclassfn);
                       cls = (*initializeClass)();
-                  } catch (JCCEnv::pythonError e) {
+                  } catch (JCCEnv::pythonError) {
                       return -1;
                   } catch (JCCEnv::exception e) {
                       PyErr_SetJavaError(e.throwable);

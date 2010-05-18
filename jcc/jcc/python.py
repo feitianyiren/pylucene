@@ -541,7 +541,8 @@ def extension(env, out, indent, cls, names, name, count, method, generics):
 
 def python(env, out_h, out, cls, superCls, names, superNames,
            constructors, methods, protectedMethods, fields, instanceFields,
-           mapping, sequence, rename, declares, typeset, moduleName, generics):
+           mapping, sequence, rename, declares, typeset, moduleName, generics,
+           _dll_export):
 
     line(out_h)
     line(out_h, 0, '#include <Python.h>')
@@ -551,7 +552,8 @@ def python(env, out_h, out, cls, superCls, names, superNames,
     for name in names[:-1]:
         line(out_h, indent, 'namespace %s {', cppname(name))
         indent += 1
-    line(out_h, indent, 'extern PyTypeObject TYPE_NAME(%s);', names[-1])
+    line(out_h, indent, '%sextern PyTypeObject TYPE_NAME(%s);', 
+         _dll_export, names[-1])
 
     if generics:
         clsParams = getTypeParameters(cls)
@@ -559,7 +561,7 @@ def python(env, out_h, out, cls, superCls, names, superNames,
         clsParams = None
 
     line(out_h)
-    line(out_h, indent, 'class t_%s {', names[-1])
+    line(out_h, indent, 'class %st_%s {', _dll_export, names[-1])
     line(out_h, indent, 'public:')
     line(out_h, indent + 1, 'PyObject_HEAD')
     line(out_h, indent + 1, '%s object;', cppname(names[-1]))
@@ -1720,7 +1722,7 @@ def compile(env, jccPath, output, moduleName, install, dist, debug, jars,
         script_args.append('--debug')
         compile_args += DEBUG_CFLAGS
     elif sys.platform == 'win32':
-        pass
+	pass
     elif sys.platform == 'sunos5':
         link_args.append('-Wl,-s')
     else:
@@ -1749,11 +1751,12 @@ def compile(env, jccPath, output, moduleName, install, dist, debug, jars,
         'extra_compile_args': compile_args,
         'extra_link_args': link_args,
         'include_dirs': includes,
-        'sources': sources
+        'sources': sources,
+        'define_macros': []
     }
 
     if generics:
-        args['define_macros'] = [('_java_generics', None)]
+        args['define_macros'] += [('_java_generics', None)]
 
     if shared:
         shlibdir = os.path.dirname(os.path.dirname(_jcc.__file__))
@@ -1770,8 +1773,25 @@ def compile(env, jccPath, output, moduleName, install, dist, debug, jars,
             args['library_dirs'] = [shlibdir]
             args['libraries'] = ['jcc']
         elif sys.platform == 'win32':
-            jcclib = 'jcc%s.lib' %(debug and '_d' or '')
-            args['extra_link_args'] += [os.path.join(shlibdir, 'jcc', jcclib)]
+            _d = debug and '_d' or ''
+            libdir = os.path.join(modulePath, 'lib')
+            if not os.path.exists(libdir):
+                os.mkdir(libdir)
+            extlib = os.path.join('lib', "%s%s.lib" %(extname, _d))
+            package_data.append(extlib)
+            args['extra_link_args'] += [
+                os.path.join(shlibdir, 'jcc', 'jcc%s.lib' %(_d)),
+                "/IMPLIB:%s" %(os.path.join(modulePath, extlib))
+            ]
+            args['libraries'] = [
+                os.path.join(import_.__dir__, 'lib',
+                             '_%s%s' %(import_.__name__, _d))
+                for import_ in imports
+            ]
+            args['define_macros'] += [
+                ("_dll_%s" %(import_.__name__), '_declspec(dllimport)')
+                for import_ in imports
+            ] + [("_dll_%s" %(moduleName), '_declspec(dllexport)')]
         else:
             raise NotImplementedError, "shared mode on %s" %(sys.platform)
 

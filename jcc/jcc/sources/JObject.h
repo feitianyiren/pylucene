@@ -20,7 +20,7 @@
 #include <stdio.h>
 #include "JCCEnv.h"
 
-class JObject {
+class _DLL_EXPORT JObject {
 public:
     jobject this$;
     int id;  /* zero when this$ is a weak ref */

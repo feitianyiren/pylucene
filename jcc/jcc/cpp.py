@@ -509,8 +509,11 @@ def jcc(args):
             typeset.add(findClass('java/io/Writer'))
             packages.add('java.lang')
 
+        _dll_export = ''
         if moduleName:
             cppdir = os.path.join(output, '_%s' %(moduleName))
+            if shared and sys.platform == 'win32':
+                _dll_export = "_dll_%s " %(moduleName)
         else:
             cppdir = output
 
@@ -550,7 +553,7 @@ def jcc(args):
                 (superCls, constructors, methods, protectedMethods,
                  fields, instanceFields, declares) = \
                     header(env, out_h, cls, typeset, packages, excludes,
-                           generics)
+                           generics, _dll_export)
 
                 if not allInOne:
                     out_cpp = file(fileName + '.cpp', 'w')
@@ -566,7 +569,8 @@ def jcc(args):
                            fields, instanceFields,
                            mappings.get(className), sequences.get(className),
                            renames.get(className),
-                           declares, typeset, moduleName, generics)
+                           declares, typeset, moduleName, generics,
+                           _dll_export)
 
                 line(out_h)
                 line(out_h, 0, '#endif')
@@ -601,7 +605,7 @@ def jcc(args):
                         arch, generics, resources, imports)
 
 
-def header(env, out, cls, typeset, packages, excludes, generics):
+def header(env, out, cls, typeset, packages, excludes, generics, _dll_export):
 
     names = cls.getName().split('.')
     superCls = cls.getSuperclass()
@@ -765,10 +769,11 @@ def header(env, out, cls, typeset, packages, excludes, generics):
 
     line(out)
     if superClsName == 'JObject':
-        line(out, indent, 'class %s : public JObject {', cppname(names[-1]))
+        line(out, indent, 'class %s%s : public JObject {',
+             _dll_export, cppname(names[-1]))
     else:
-        line(out, indent, 'class %s : public %s {',
-             cppname(names[-1]), '::'.join(cppnames(superNames)))
+        line(out, indent, 'class %s%s : public %s {',
+             _dll_export, cppname(names[-1]), '::'.join(cppnames(superNames)))
         
     line(out, indent, 'public:')
     indent += 1
