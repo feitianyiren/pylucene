@@ -709,6 +709,52 @@ void JCCEnv::setClassPath(const char *classPath)
     free(path);
 }
 
+char *JCCEnv::getClassPath()
+{
+    JNIEnv *vm_env = get_vm_env();
+    jclass _ucl = (jclass) vm_env->FindClass("java/net/URLClassLoader");
+    jclass _url = (jclass) vm_env->FindClass("java/net/URL");
+    jmethodID mid = vm_env->GetStaticMethodID(_ucl, "getSystemClassLoader",
+                                              "()Ljava/lang/ClassLoader;");
+    jobject classLoader = vm_env->CallStaticObjectMethod(_ucl, mid);
+    jmethodID gu = vm_env->GetMethodID(_ucl, "getURLs", "()[Ljava/net/URL;");
+    jmethodID gp = vm_env->GetMethodID(_url, "getPath", "()Ljava/lang/String;");
+#ifdef WINDOWS
+    char *pathsep = ";";
+#else
+    char *pathsep = ":";
+#endif
+    jobjectArray array = (jobjectArray)
+        vm_env->CallObjectMethod(classLoader, gu);
+    int count = array ? vm_env->GetArrayLength(array) : 0;
+    int first = 1, total = 0;
+    char *classpath = NULL;
+    
+    for (int i = 0; i < count; i++) {
+        jobject url = vm_env->GetObjectArrayElement(array, i);
+        jstring path = (jstring) vm_env->CallObjectMethod(url, gp);
+        const char *chars = vm_env->GetStringUTFChars(path, NULL);
+        int size = vm_env->GetStringUTFLength(path);
+
+        total += size + 1;
+        if (classpath == NULL)
+            classpath = (char *) calloc(total, 1);
+        else
+            classpath = (char *) realloc(classpath, total);
+        if (classpath == NULL)
+            return NULL;
+
+        if (first)
+            first = 0;
+        else
+            strcat(classpath, pathsep);
+
+        strcat(classpath, chars);
+    }
+
+    return classpath;
+}
+
 jstring JCCEnv::fromUTF(const char *bytes) const
 {
     jstring str = get_vm_env()->NewStringUTF(bytes);

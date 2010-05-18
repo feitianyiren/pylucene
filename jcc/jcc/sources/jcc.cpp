@@ -49,10 +49,12 @@ static PyObject *t_jccenv__addClassPath(PyObject *self, PyObject *args);
 
 static PyObject *t_jccenv__get_jni_version(PyObject *self, void *data);
 static PyObject *t_jccenv__get_java_version(PyObject *self, void *data);
+static PyObject *t_jccenv__get_classpath(PyObject *self, void *data);
 
 static PyGetSetDef t_jccenv_properties[] = {
     { "jni_version", (getter) t_jccenv__get_jni_version, NULL, NULL, NULL },
     { "java_version", (getter) t_jccenv__get_java_version, NULL, NULL, NULL },
+    { "classpath", (getter) t_jccenv__get_classpath, NULL, NULL, NULL },
     { NULL, NULL, NULL, NULL, NULL }
 };
 
@@ -291,6 +293,21 @@ static PyObject *t_jccenv__get_jni_version(PyObject *self, void *data)
 static PyObject *t_jccenv__get_java_version(PyObject *self, void *data)
 {
     return env->fromJString(env->getJavaVersion(), 1);
+}
+
+static PyObject *t_jccenv__get_classpath(PyObject *self, void *data)
+{
+    char *classpath = env->getClassPath();
+
+    if (classpath)
+    {
+        PyObject *result = PyString_FromString(classpath);
+
+        free(classpath);
+        return result;
+    }
+
+    Py_RETURN_NONE;
 }
 
 _DLL_EXPORT PyObject *getVMEnv(PyObject *self)

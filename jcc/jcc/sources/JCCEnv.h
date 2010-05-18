@@ -286,6 +286,7 @@ public:
     }
 
     virtual void setClassPath(const char *classPath);
+    virtual char *getClassPath();
 
     virtual jstring fromUTF(const char *bytes) const;
     virtual char *toUTF(jstring str) const;
