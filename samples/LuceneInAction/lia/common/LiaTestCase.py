@@ -41,14 +41,14 @@ class LiaTestCase(TestCase):
         if not hits:
             print "No hits"
         else:
-            for hit in hits:
+            for hit in hits.iterator():
                 hit = Hit.cast_(hit)
                 print "%s: %s" %(hit.getScore(),
                                  hit.getDocument().get('title'))
 
     def assertHitsIncludeTitle(self, hits, title):
 
-        for hit in hits:
+        for hit in hits.iterator():
             doc = Hit.cast_(hit).getDocument()
             if title == doc.get("title"):
                 self.assert_(True)

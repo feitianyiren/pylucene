@@ -76,7 +76,7 @@ class BooksLikeThis(object):
         hits = self.searcher.search(likeThisQuery)
 
         docs = []
-        for hit in hits:
+        for hit in hits.iterator():
             hit = Hit.cast_(hit)
             doc = hit.getDocument()
             if len(docs) < max:

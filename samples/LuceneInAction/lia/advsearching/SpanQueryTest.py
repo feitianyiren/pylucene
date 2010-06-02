@@ -171,7 +171,7 @@ class SpanQueryTest(TestCase):
 
         hits = self.searcher.search(query)
         scores = [0, 0]
-        for hit in hits:
+        for hit in hits.iterator():
             hit = Hit.cast_(hit)
             scores[hit.getId()] = hit.getScore()
 

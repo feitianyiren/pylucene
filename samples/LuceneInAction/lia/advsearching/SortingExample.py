@@ -35,7 +35,7 @@ class SortingExample(object):
               "id".center(4), "score".center(15)
 
         scoreFormatter = DecimalFormat("0.######")
-        for i, doc in hits:
+        for i, doc in hits.iterator():
             title = doc["title"]
             if len(title) > 30:
                 title = title[:30]

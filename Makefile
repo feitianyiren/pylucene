@@ -14,10 +14,10 @@
 # site-packages directory.
 #
 
-VERSION=2.9.2-1
+VERSION=2.9.3-1
 LUCENE_SVN_VER=HEAD
-LUCENE_VER=2.9.2
-LUCENE_SVN=http://svn.apache.org/repos/asf/lucene/java/tags/lucene_2_9_2
+LUCENE_VER=2.9.3
+LUCENE_SVN=http://svn.apache.org/repos/asf/lucene/java/branches/lucene_2_9
 PYLUCENE:=$(shell pwd)
 LUCENE=lucene-java-$(LUCENE_VER)
 
@@ -196,6 +196,7 @@ JARS=$(LUCENE_JAR) $(SNOWBALL_JAR) $(ANALYZERS_JAR) \
 jars: $(JARS)
 
 GENERATE=$(JCC) $(foreach jar,$(JARS),--jar $(jar)) \
+           --no-generics \
            --package java.lang java.lang.System \
                                java.lang.Runtime \
            --package java.util \

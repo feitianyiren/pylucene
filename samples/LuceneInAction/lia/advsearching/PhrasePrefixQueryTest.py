@@ -71,5 +71,5 @@ class PhrasePrefixQueryTest(TestCase):
 
     def debug(self, hits):
 
-        for i, doc in hits:
+        for i, doc in hits.iterator():
             print "%s: %s" %(hits.score(i), doc['field'])

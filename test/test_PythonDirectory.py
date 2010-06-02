@@ -123,10 +123,10 @@ class PythonFileStreamOutput(PythonIndexOutput):
     def seekInternal(self, pos):
         self.fh.seek(pos)
 
-    def flushBuffer(self, buffer):
-        self.fh.write(''.join(buffer))
+    def flushBuffer(self, bytes):
+        self.fh.write(bytes.string_)
         self.fh.flush()
-        self._length += len(buffer)
+        self._length += len(bytes)
 
 
 class PythonFileDirectory(PythonDirectory):

@@ -43,7 +43,7 @@ class HighlightTest(LiaTestCase):
         scorer = QueryScorer(query)
         highlighter = Highlighter(scorer)
 
-        for hit in hits:
+        for hit in hits.iterator():
             doc = Hit.cast_(hit).getDocument()
             title = doc["title"]
             stream = SimpleAnalyzer().tokenStream("title", StringReader(title))

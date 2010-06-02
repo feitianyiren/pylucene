@@ -49,7 +49,7 @@ class Searcher(object):
 
         print "Found %d document(s) (in %s) that matched query '%s':" %(hits.length(), duration, q)
 
-        for hit in hits:
+        for hit in hits.iterator():
             doc = Hit.cast_(hit).getDocument()
             print doc["path"]
 

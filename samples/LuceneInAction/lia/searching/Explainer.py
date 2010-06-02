@@ -40,7 +40,7 @@ class Explainer(object):
             searcher = IndexSearcher(directory)
             hits = searcher.search(query)
 
-            for hit in hits:
+            for hit in hits.iterator():
                 hit = Hit.cast_(hit)
                 doc = hit.getDocument()
                 id = hit.getId()
