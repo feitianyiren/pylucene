@@ -3,7 +3,6 @@ Version 3.0.1 -> 3.0.2
 ----------------------
  - using Lucene 3.0.2 sources
  - PyLucene built with JCC 2.6
- - 
 
 Version 3.0.0 -> 3.0.1
 ----------------------
