@@ -17,7 +17,7 @@
 VERSION=2.9.3-1
 LUCENE_SVN_VER=HEAD
 LUCENE_VER=2.9.3
-LUCENE_SVN=http://svn.apache.org/repos/asf/lucene/java/branches/lucene_2_9
+LUCENE_SVN=http://svn.apache.org/repos/asf/lucene/java/tags/lucene_2_9_3
 PYLUCENE:=$(shell pwd)
 LUCENE=lucene-java-$(LUCENE_VER)
 
