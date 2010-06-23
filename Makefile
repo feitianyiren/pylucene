@@ -188,10 +188,12 @@ JARS=$(LUCENE_JAR) $(SNOWBALL_JAR) $(ANALYZERS_JAR) \
      $(REGEX_JAR) $(MEMORY_JAR) $(HIGHLIGHTER_JAR) $(QUERIES_JAR) \
      $(EXTENSIONS_JAR)
 
+JCCFLAGS?=
 
 jars: $(JARS)
 
 GENERATE=$(JCC) $(foreach jar,$(JARS),--jar $(jar)) \
+           $(JCCFLAGS) \
            --package java.lang java.lang.System \
                                java.lang.Runtime \
            --package java.util \
