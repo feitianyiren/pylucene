@@ -30,12 +30,14 @@ LUCENE=lucene-java-$(LUCENE_VER)
 # PREFIX: where programs are normally installed on your system (Unix).
 # PREFIX_PYTHON: where your version of python is installed.
 # JCC: how jcc is invoked, depending on the python version:
+#  - python 2.7:
+#      $(PYTHON) -m jcc
 #  - python 2.6:
 #      $(PYTHON) -m jcc.__main__
 #  - python 2.5:
 #      $(PYTHON) -m jcc
 #  - python 2.4:
-#      $(PYTHON) $(PREFIX_PYTHON)/lib/python2.4/site-packages/jcc/__init__.py
+#      $(PYTHON) $(PREFIX_PYTHON)/lib/python2.4/site-packages/jcc/__main__.py
 # NUM_FILES is the number of wrapper files to generate. By default, jcc
 # generates all C++ classes into one single file. This may exceed a compiler
 # limit.
@@ -46,6 +48,13 @@ LUCENE=lucene-java-$(LUCENE_VER)
 #ANT=ant
 #PYTHON=$(PREFIX_PYTHON)/bin/python
 #JCC=$(PYTHON) -m jcc.__main__ --shared --arch x86_64
+#NUM_FILES=3
+
+# Mac OS X 10.6 (MacPorts 1.8.0 64-bit Python 2.7, Java 1.6)
+#PREFIX_PYTHON=/opt/local
+#ANT=ant
+#PYTHON=$(PREFIX_PYTHON)/bin/python
+#JCC=$(PYTHON) -m jcc --shared --arch x86_64
 #NUM_FILES=3
 
 # Mac OS X 10.6 (MacPorts 1.8.0 64-bit Python 2.6, Java 1.6)
@@ -189,6 +198,7 @@ JARS=$(LUCENE_JAR) $(ANALYZERS_JAR) \
      $(MEMORY_JAR) $(HIGHLIGHTER_JAR) $(QUERIES_JAR) \
      $(EXTENSIONS_JAR)
 
+JCCFLAGS?=
 
 jars: $(JARS)
 
@@ -214,6 +224,7 @@ resources:
 endif
 
 GENERATE=$(JCC) $(foreach jar,$(JARS),--jar $(jar)) \
+           $(JCCFLAGS) \
            --package java.lang java.lang.System \
                                java.lang.Runtime \
            --package java.util \
