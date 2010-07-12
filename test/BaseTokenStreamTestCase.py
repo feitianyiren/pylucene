@@ -49,7 +49,7 @@ class BaseTokenStreamTestCase(TestCase):
             posIncrAtt = ts.getAttribute(PositionIncrementAttribute.class_)
     
         ts.reset()
-        for i in xrange(len(output)):
+        for i in range(len(output)):
             # extra safety to enforce, that the state is not preserved and
             # also assign bogus values
             ts.clearAttributes()

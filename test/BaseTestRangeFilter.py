@@ -67,7 +67,7 @@ class BaseTestRangeFilter(TestCase):
                              IndexWriter.MaxFieldLength.LIMITED)
 
         seed(101)
-        for d in xrange(self.minId, self.maxId + 1):
+        for d in range(self.minId, self.maxId + 1):
             doc = Document()
             doc.add(Field("id", self.pad(d), Field.Store.YES,
                           Field.Index.NOT_ANALYZED));
@@ -95,7 +95,7 @@ class BaseTestRangeFilter(TestCase):
 
         tests = [-9999999, -99560, -100, -3, -1, 0, 3, 9, 10, 1000, 999999999]
 
-        for i in xrange(0, len(tests) - 1):
+        for i in range(0, len(tests) - 1):
             a = tests[i]
             b = tests[i + 1]
             aa = self.pad(a)

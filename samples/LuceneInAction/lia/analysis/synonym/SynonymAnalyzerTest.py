@@ -97,10 +97,10 @@ class SynonymAnalyzerTest(TestCase):
 
         query = QueryParser(Version.LUCENE_CURRENT, "content",
                             cls.synonymAnalyzer).parse('"fox jumps"')
-        print "\"fox jumps\" parses to ", query.toString("content")
+        print("\"fox jumps\" parses to ", query.toString("content"))
 
-        print "From AnalyzerUtils.tokensFromAnalysis: "
+        print("From AnalyzerUtils.tokensFromAnalysis: ")
         AnalyzerUtils.displayTokens(cls.synonymAnalyzer, "\"fox jumps\"")
-        print ''
+        print('')
         
     main = classmethod(main)

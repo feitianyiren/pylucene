@@ -45,7 +45,7 @@ class QueryParserTest(LiaTestCase):
                              StandardAnalyzer(Version.LUCENE_CURRENT))
         parser.setLowercaseExpandedTerms(False)
 
-        print parser.parse("/Computers/technology*").toString("category")
+        print(parser.parse("/Computers/technology*").toString("category"))
 
     def testGrouping(self):
 
@@ -82,7 +82,7 @@ class QueryParserTest(LiaTestCase):
         parser = QueryParser(Version.LUCENE_CURRENT, "subject", self.analyzer)
         parser.setLocale(Locale.US)
         query = parser.parse(expression)
-        print expression, "parsed to", query
+        print(expression, "parsed to", query)
 
         topDocs = self.searcher.search(query, 50)
         self.assert_(topDocs.totalHits > 0)

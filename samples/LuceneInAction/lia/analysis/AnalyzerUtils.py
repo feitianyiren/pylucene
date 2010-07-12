@@ -22,12 +22,12 @@ class AnalyzerUtils(object):
 
     def main(cls, argv):
 
-        print "SimpleAnalyzer"
+        print("SimpleAnalyzer")
         cls.displayTokensWithFullDetails(SimpleAnalyzer(),
                                          "The quick brown fox....")
 
-        print "\n----"
-        print "StandardAnalyzer"
+        print("\n----")
+        print("StandardAnalyzer")
         cls.displayTokensWithFullDetails(StandardAnalyzer(Version.LUCENE_CURRENT), "I'll e-mail you at xyz@example.com")
 
     def setPositionIncrement(cls, source, posIncr):
@@ -61,7 +61,7 @@ class AnalyzerUtils(object):
         term = tokenStream.addAttribute(CharTermAttribute.class_)
 
         while tokenStream.incrementToken():
-            print "[%s]" %(term.toString()),
+            print("[%s]" %(term.toString()), end=' ')
 
     def displayTokensWithPositions(cls, analyzer, text):
 
@@ -74,10 +74,10 @@ class AnalyzerUtils(object):
             increment = posIncr.getPositionIncrement()
             if increment > 0:
                 position = position + increment
-                print "\n%d:" %(position),
+                print("\n%d:" %(position), end=' ')
 
-            print "[%s]" %(term.toString()),
-        print
+            print("[%s]" %(term.toString()), end=' ')
+        print()
 
     def displayTokensWithFullDetails(cls, analyzer, text):
 
@@ -93,13 +93,13 @@ class AnalyzerUtils(object):
             increment = posIncr.getPositionIncrement()
             if increment > 0:
                 position = position + increment
-                print "\n%d:" %(position),
+                print("\n%d:" %(position), end=' ')
 
-            print "[%s:%d->%d:%s]" %(term.toString(),
+            print("[%s:%d->%d:%s]" %(term.toString(),
                                      offset.startOffset(),
                                      offset.endOffset(),
-                                     type.type()),
-        print
+                                     type.type()), end=' ')
+        print()
 
     def assertAnalyzesTo(cls, analyzer, input, outputs):
 
@@ -107,12 +107,12 @@ class AnalyzerUtils(object):
         termAttr = stream.addAttribute(CharTermAttribute.class_)
         for output in outputs:
             if not stream.incrementToken():
-                raise AssertionError, 'stream.incremementToken()'
+                raise AssertionError('stream.incremementToken()')
             if output != termAttr.toString():
-                raise AssertionError, 'output == termAttr.toString())'
+                raise AssertionError('output == termAttr.toString())')
 
         if stream.incrementToken():
-            raise AssertionError, 'not stream.incremementToken()'
+            raise AssertionError('not stream.incremementToken()')
 
         stream.close()
 

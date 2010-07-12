@@ -245,7 +245,7 @@ class PositionIncrementTestCase(TestCase):
             it = payloads.iterator()
             while it.hasNext():
                 count += 1
-                it.next()
+                next(it)
 
         self.assertEqual(5, count)
         self.assert_(sawZero)
@@ -266,8 +266,8 @@ class PositionIncrementTestCase(TestCase):
         count = pls.size()
         it = pls.iterator()
         while it.hasNext():
-            bytes = JArray('byte').cast_(it.next())
-            s = bytes.string_
+            data = JArray('byte').cast_(next(it))
+            s = data.string_
             sawZero |= s == "pos: 0"
 
         self.assertEqual(5, count)
@@ -318,8 +318,8 @@ class PayloadFilter(PythonTokenFilter):
     def incrementToken(self):
 
         if self.input.incrementToken():
-            bytes = JArray('byte')("pos: %d" %(self.pos))
-            self.payloadAttr.setPayload(Payload(bytes))
+            data = JArray('byte')(bytes("pos: %d" %(self.pos), 'utf-8'))
+            self.payloadAttr.setPayload(Payload(data))
 
             if self.i % 2 == 1:
                 posIncr = 1

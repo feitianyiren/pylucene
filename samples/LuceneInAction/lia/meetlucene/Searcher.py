@@ -26,14 +26,14 @@ class Searcher(object):
     def main(cls, argv):
 
         if len(argv) != 3:
-            print "Usage: python Searcher.py <index dir> <query>"
+            print("Usage: python Searcher.py <index dir> <query>")
 
         else:
             indexDir = argv[1]
             q = argv[2]
 
             if not (os.path.exists(indexDir) and os.path.isdir(indexDir)):
-                raise IOError, "%s does not exist or is not a directory" %(indexDir)
+                raise IOError("%s does not exist or is not a directory" %(indexDir))
 
             cls.search(indexDir, q)
 
@@ -47,11 +47,11 @@ class Searcher(object):
         hits = searcher.search(query)
         duration = timedelta(seconds=time() - start)
 
-        print "Found %d document(s) (in %s) that matched query '%s':" %(hits.length(), duration, q)
+        print("Found %d document(s) (in %s) that matched query '%s':" %(hits.length(), duration, q))
 
         for hit in hits:
             doc = Hit.cast_(hit).getDocument()
-            print doc["path"]
+            print(doc["path"])
 
     main = classmethod(main)
     search = classmethod(search)

@@ -56,5 +56,5 @@ class SpecialsFilterTest(LiaTestCase):
         logoOrEdBooks.add(edBooksOnSpecial, BooleanClause.Occur.SHOULD)
 
         topDocs = self.searcher.search(logoOrEdBooks, 50)
-        print logoOrEdBooks
+        print(logoOrEdBooks)
         self.assertEqual(2, topDocs.totalHits, "Papert and Steiner")

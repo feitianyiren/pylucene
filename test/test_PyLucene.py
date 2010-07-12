@@ -113,7 +113,7 @@ class Test_PyLuceneBase(object):
             # using a unicode body cause problems, which seems very odd
             # since the python type is the same regardless affter doing
             # the encode
-            body_text = u"hello world"*20
+            body_text = "hello world"*20
             body_reader = StringReader(body_text)
             doc.add(Field("content", body_reader))
 

@@ -32,103 +32,21 @@ MODULES=lucene-modules-$(LUCENE_VER)
 # PREFIX: where programs are normally installed on your system (Unix).
 # PREFIX_PYTHON: where your version of python is installed.
 # JCC: how jcc is invoked, depending on the python version:
-#  - python 2.7:
+#  - python 3.2:
 #      $(PYTHON) -m jcc
-#  - python 2.6:
+#  - python 3.1:
 #      $(PYTHON) -m jcc.__main__
-#  - python 2.5:
-#      $(PYTHON) -m jcc
-#  - python 2.4:
-#      $(PYTHON) $(PREFIX_PYTHON)/lib/python2.4/site-packages/jcc/__init__.py
 # NUM_FILES is the number of wrapper files to generate. By default, jcc
 # generates all C++ classes into one single file. This may exceed a compiler
 # limit.
 #
 
-# Mac OS X 10.6 (64-bit Python 2.6, Java 1.6)
-#PREFIX_PYTHON=/usr
-#ANT=ant
-#PYTHON=$(PREFIX_PYTHON)/bin/python
-#JCC=$(PYTHON) -m jcc.__main__ --shared --arch x86_64
-#NUM_FILES=3
-
 # Mac OS X 10.6 (MacPorts 1.8.0 64-bit Python 2.7, Java 1.6)
-#PREFIX_PYTHON=/opt/local
+#PREFIX_PYTHON=/Users/vajda/apache/python3/_install
 #ANT=ant
 #PYTHON=$(PREFIX_PYTHON)/bin/python
-#JCC=$(PYTHON) -m jcc --arch x86_64
+#JCC=$(PYTHON) -m jcc.__main__ --arch x86_64
 #NUM_FILES=3
-
-# Mac OS X 10.6 (64-bit and 32-bit Python 2.6 together, Java 1.6)
-#PREFIX_PYTHON=/usr
-#ANT=ant
-#PYTHON=$(PREFIX_PYTHON)/bin/python
-#JCC=$(PYTHON) -m jcc.__main__ --shared --arch x86_64 --arch i386
-#NUM_FILES=3
-
-# Mac OS X 10.5 (32-bit Python 2.5, Java 1.5)
-#PREFIX_PYTHON=/usr
-#ANT=ant
-#PYTHON=$(PREFIX_PYTHON)/bin/python
-#JCC=$(PYTHON) -m jcc --shared
-#NUM_FILES=3
-
-# Mac OS X  (Python 2.3.5, Java 1.5, setuptools 0.6c7, Intel Mac OS X 10.4)
-#PREFIX_PYTHON=/usr
-#ANT=ant
-#PYTHON=$(PREFIX_PYTHON)/bin/python
-#JCC=$(PYTHON) /System/Library/Frameworks/Python.framework/Versions/2.3/lib/python2.3/site-packages/JCC-2.3-py2.3-macosx-10.4-i386.egg/jcc/__init__.py
-#NUM_FILES=3
-
-# Mac OS X  (Python 2.3.5, Java 1.5, setuptools 0.6c7, PPC Mac OS X 10.4)
-#PREFIX_PYTHON=/usr
-#ANT=ant
-#PYTHON=$(PREFIX_PYTHON)/bin/python
-#JCC=$(PYTHON) /System/Library/Frameworks/Python.framework/Versions/2.3/lib/python2.3/site-packages/JCC-2.3-py2.3-macosx-10.4-ppc.egg/jcc/__init__.py
-#NUM_FILES=3
-
-# Linux     (Ubuntu 6.06, Python 2.4, Java 1.5, no setuptools)
-#PREFIX_PYTHON=/usr
-#ANT=ant
-#PYTHON=$(PREFIX_PYTHON)/bin/python
-#JCC=$(PYTHON) $(PREFIX_PYTHON)/lib/python2.4/site-packages/jcc/__init__.py
-#NUM_FILES=3
-
-# Linux     (Ubuntu 8.10 64-bit, Python 2.5.2, OpenJDK 1.6, setuptools 0.6c9)
-#PREFIX_PYTHON=/usr
-#ANT=ant
-#PYTHON=$(PREFIX_PYTHON)/bin/python
-#JCC=$(PYTHON) -m jcc --shared
-#NUM_FILES=3
-
-# FreeBSD
-#PREFIX_PYTHON=/usr
-#ANT=ant
-#PYTHON=$(PREFIX_PYTHON)/bin/python
-#JCC=$(PYTHON) -m jcc
-#NUM_FILES=3
-
-# Solaris   (Solaris 11, Python 2.4 32-bit, Sun Studio 12, Java 1.6)
-#PREFIX_PYTHON=/usr
-#ANT=/usr/local/apache-ant-1.7.0/bin/ant
-#PYTHON=$(PREFIX_PYTHON)/bin/python
-#JCC=$(PYTHON) $(PREFIX_PYTHON)/lib/python2.4/site-packages/jcc/__init__.py
-#NUM_FILES=3
-
-# Windows   (Win32, Python 2.5.1, Java 1.6, ant 1.7.0)
-#PREFIX_PYTHON=/cygdrive/o/Python-2.5.2/PCbuild
-#ANT=JAVA_HOME=o:\\Java\\jdk1.6.0_02 /cygdrive/o/java/apache-ant-1.7.0/bin/ant
-#PYTHON=$(PREFIX_PYTHON)/python.exe
-#JCC=$(PYTHON) -m jcc --shared
-#NUM_FILES=3
-
-# Windows   (Win32, msys/MinGW, Python 2.6.4, Java 1.6, ant 1.7.1 (WinAnt))
-#PREFIX_PYTHON=/c/Python26
-#ANT=JAVA_HOME="c:\\Program Files\\Java\\jdk1.6.0_18" "/c/Program Files/WinAnt/bin/ant"
-#PYTHON=$(PREFIX_PYTHON)/python.exe
-#JCC=$(PYTHON) -m jcc.__main__ --shared --compiler mingw32
-#NUM_FILES=3
-
 
 #
 # No edits required below
@@ -203,7 +121,7 @@ ifneq ($(ICUPKG),)
 
 ICURES= $(MODULES)/analysis/icu/src/resources
 RESOURCES=--resources $(ICURES)
-ENDIANNESS:=$(shell $(PYTHON) -c "import struct; print struct.pack('h', 1) == '\000\001' and 'b' or 'l'")
+ENDIANNESS:=$(shell $(PYTHON) -c "import struct; print(struct.pack('h', 1) == '\000\001' and 'b' or 'l')")
 
 resources: $(ICURES)/org/apache/lucene/analysis/icu/utr30.dat
 

@@ -16,6 +16,6 @@ while True:
     member = tar.next()
     if member is None:
         break
-    print member.name
+    print(member.name)
     tar.extract(member, baseDir)
 tar.close()

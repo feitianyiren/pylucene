@@ -28,7 +28,7 @@ class SpecialsFilter(PythonFilter):
 
     def getDocIdSet(self, reader):
 
-        bits = OpenBitSet(long(reader.maxDoc()))
+        bits = OpenBitSet(int(reader.maxDoc()))
         isbns = self.accessor.isbns()
 
         for isbn in isbns:
@@ -38,7 +38,7 @@ class SpecialsFilter(PythonFilter):
                 result = docsEnum.getBulkResult()
                 count = docsEnum.read()
                 if count == 1:
-                    bits.set(long(result.docs.ints[0]))
+                    bits.set(int(result.docs.ints[0]))
 
         return bits
 

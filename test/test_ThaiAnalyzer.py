@@ -24,22 +24,22 @@ class ThaiAnalyzerTestCase(BaseTokenStreamTestCase):
 
         analyzer = ThaiAnalyzer(Version.LUCENE_CURRENT)
     
-        self._assertAnalyzesTo(analyzer, u"", [])
+        self._assertAnalyzesTo(analyzer, "", [])
 
         self._assertAnalyzesTo(analyzer,
-                               u"การที่ได้ต้องแสดงว่างานดี",
-                               [ u"การ", u"ที่", u"ได้", u"ต้อง",
-                                 u"แสดง", u"ว่า", u"งาน", u"ดี" ])
+                               "การที่ได้ต้องแสดงว่างานดี",
+                               [ "การ", "ที่", "ได้", "ต้อง",
+                                 "แสดง", "ว่า", "งาน", "ดี" ])
 
         self._assertAnalyzesTo(analyzer,
-                               u"บริษัทชื่อ XY&Z - คุยกับ xyz@demo.com",
-                               [ u"บริษัท", u"ชื่อ", u"xy&z", u"คุย", u"กับ", u"xyz@demo.com" ])
+                               "บริษัทชื่อ XY&Z - คุยกับ xyz@demo.com",
+                               [ "บริษัท", "ชื่อ", "xy&z", "คุย", "กับ", "xyz@demo.com" ])
 
         # English stop words
         self._assertAnalyzesTo(analyzer,
-                               u"ประโยคว่า The quick brown fox jumped over the lazy dogs",
-                               [ u"ประโยค", u"ว่า", u"quick", u"brown", u"fox",
-                                 u"jumped", u"over", u"lazy", u"dogs" ])
+                               "ประโยคว่า The quick brown fox jumped over the lazy dogs",
+                               [ "ประโยค", "ว่า", "quick", "brown", "fox",
+                                 "jumped", "over", "lazy", "dogs" ])
 
 
 if __name__ == "__main__":

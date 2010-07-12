@@ -42,14 +42,14 @@ class TestDataDocumentHandler(object):
 
     def indexFile(cls, writer, path, baseDir):
         
-        input = file(path)
+        input = open(path, encoding='unicode-escape')
         props = {}
         while True:
             line = input.readline().strip()
             if not line:
                 break
             name, value = line.split('=', 1)
-            props[name] = value.decode('unicode-escape')
+            props[name] = value
         input.close()
 
         doc = Document()
@@ -66,11 +66,11 @@ class TestDataDocumentHandler(object):
         subject = props['subject']
         pubmonth = props['pubmonth']
 
-        print title.encode('utf8')
-        print author.encode('utf-8')
-        print subject.encode('utf-8')
-        print category.encode('utf-8')
-        print "---------"
+        print((title.encode('utf8')))
+        print((author.encode('utf-8')))
+        print((subject.encode('utf-8')))
+        print((category.encode('utf-8')))
+        print("---------")
 
         doc.add(Field("isbn", isbn,
                       Field.Store.YES, Field.Index.NOT_ANALYZED))

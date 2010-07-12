@@ -33,7 +33,7 @@ class AdvancedQueryParserTest(TestCase):
         writer = IndexWriter(self.directory, self.analyzer, True, 
                              IndexWriter.MaxFieldLength.LIMITED)
 
-        for i in xrange(1, 501):
+        for i in range(1, 501):
             doc = Document()
             doc.add(Field("id", NumberUtils.pad(i),
                           Field.Store.YES, Field.Index.NOT_ANALYZED))
@@ -89,8 +89,8 @@ class AdvancedQueryParserTest(TestCase):
         scoreDocs = searcher.search(query, 1000).scoreDocs
         self.assertEqual(310, len(scoreDocs))
 
-        print parser.parse("special:[term TO *]")
-        print parser.parse("special:[* TO term]")
+        print(parser.parse("special:[term TO *]"))
+        print(parser.parse("special:[* TO term]"))
 
     def testPhraseQuery(self):
 

@@ -23,8 +23,8 @@ class TestBinaryDocument(TestCase):
   
     def testBinaryFieldInIndex(self):
 
-        bytes = JArray('byte')(self.binaryValStored)
-        binaryFldStored = Field("binaryStored", bytes, 
+        data = JArray('byte')(bytes(self.binaryValStored, 'utf-8'))
+        binaryFldStored = Field("binaryStored", data, 
                                 Field.Store.YES)
         stringFldStored = Field("stringStored", self.binaryValStored,
                                 Field.Store.YES, Field.Index.NO,
@@ -32,9 +32,9 @@ class TestBinaryDocument(TestCase):
 
         try:
             # binary fields with store off are not allowed
-            Field("fail", bytes, Field.Store.NO)
+            Field("fail", data, Field.Store.NO)
             self.fail()
-        except JavaError, e:
+        except JavaError as e:
             self.assertEqual(e.getJavaException().getClass().getName(),
                              'java.lang.IllegalArgumentException')
     
@@ -59,8 +59,8 @@ class TestBinaryDocument(TestCase):
     
         # fetch the binary stored field and compare it's content with the
         # original one
-        bytes = docFromReader.getBinaryValue("binaryStored")
-        binaryFldStoredTest = bytes.string_
+        data = docFromReader.getBinaryValue("binaryStored")
+        binaryFldStoredTest = data.string_
         self.assertEqual(binaryFldStoredTest, self.binaryValStored)
         
         # fetch the string field and compare it's content with the original
@@ -77,8 +77,8 @@ class TestBinaryDocument(TestCase):
   
     def testCompressionTools(self):
 
-        bytes = JArray('byte')(self.binaryValCompressed)
-        binaryFldCompressed = Field("binaryCompressed", CompressionTools.compress(bytes), Field.Store.YES)
+        data = JArray('byte')(bytes(self.binaryValCompressed, 'utf-8'))
+        binaryFldCompressed = Field("binaryCompressed", CompressionTools.compress(data), Field.Store.YES)
         stringFldCompressed = Field("stringCompressed", CompressionTools.compressString(self.binaryValCompressed), Field.Store.YES)
     
         doc = Document()
@@ -99,8 +99,8 @@ class TestBinaryDocument(TestCase):
     
         # fetch the binary compressed field and compare it's content with
         # the original one
-        bytes = CompressionTools.decompress(docFromReader.getBinaryValue("binaryCompressed"))
-        binaryFldCompressedTest = bytes.string_
+        data = CompressionTools.decompress(docFromReader.getBinaryValue("binaryCompressed"))
+        binaryFldCompressedTest = data.string_
         self.assertEqual(binaryFldCompressedTest, self.binaryValCompressed)
         self.assertEqual(CompressionTools.decompressString(docFromReader.getBinaryValue("stringCompressed")), self.binaryValCompressed)
 
