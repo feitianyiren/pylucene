@@ -139,6 +139,8 @@ LUCENE=lucene-java-$(LUCENE_VER)
 # No edits required below
 #
 
+SVNOP?=export
+
 ifeq ($(DEBUG),1)
   DEBUG_OPT=--debug
 endif
@@ -160,7 +162,7 @@ ICUPKG:=$(shell which icupkg)
 default: all
 
 $(LUCENE):
-	svn export -r $(LUCENE_SVN_VER) $(LUCENE_SVN) $(LUCENE)
+	svn $(SVNOP) -r $(LUCENE_SVN_VER) $(LUCENE_SVN) $(LUCENE)
 
 sources: $(LUCENE)
 
@@ -274,10 +276,11 @@ all: sources jars resources compile
 
 clean:
 	if test -f $(LUCENE)/build.xml; then cd $(LUCENE); $(ANT) clean; fi
-	rm -rf build
+	rm -rf $(LUCENE)/build build
 
 realclean:
-	rm -rf $(LUCENE) build samples/LuceneInAction/index
+	if test ! -d $(LUCENE)/.svn; then rm -rf $(LUCENE); else rm -rf $(LUCENE)/build; fi
+	rm -rf build samples/LuceneInAction/index
 
 OS=$(shell uname)
 BUILD_TEST:=$(PYLUCENE)/build/test
