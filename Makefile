@@ -147,6 +147,7 @@ JARS+=$(QUERIES_JAR)            # regex and other contrib queries
 #JARS+=$(SMARTCN_JAR)           # smart chinese analyzer
 #JARS+=$(SPATIAL_JAR)           # spatial lucene
 
+
 #
 # No edits required below
 #
@@ -260,6 +261,7 @@ GENERATE=$(JCC) $(foreach jar,$(JARS),--jar $(jar)) \
            --exclude org.apache.lucene.queryParser.ParseException \
            --exclude org.apache.lucene.search.regex.JakartaRegexpCapabilities \
            --exclude org.apache.regexp.RegexpTunnel \
+           --exclude org.apache.lucene.analysis.cn.smart.AnalyzerProfile \
            --python lucene \
            --mapping org.apache.lucene.document.Document 'get:(Ljava/lang/String;)Ljava/lang/String;' \
            --mapping java.util.Properties 'getProperty:(Ljava/lang/String;)Ljava/lang/String;' \
