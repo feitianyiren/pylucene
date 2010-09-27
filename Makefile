@@ -7,8 +7,9 @@
 # 
 # Steps to build
 #   1. Edit the sections below as documented
-#   2. make
-#   3. make install
+#   2. Edit the JARS variable to add optional contrib modules not defaulted
+#   3. make
+#   4. make install
 #
 # The install target installs the lucene python extension in python's
 # site-packages directory.
@@ -135,6 +136,17 @@ LUCENE=lucene-java-$(LUCENE_VER)
 #NUM_FILES=3
 
 
+JARS=$(LUCENE_JAR)
+
+# comment/uncomment the desired/undesired optional contrib modules below
+JARS+=$(ANALYZERS_JAR)          # many language analyzers
+JARS+=$(MEMORY_JAR)             # single-document memory index
+JARS+=$(HIGHLIGHTER_JAR)        # needs memory contrib
+JARS+=$(EXTENSIONS_JAR)         # needs highlighter contrib
+JARS+=$(QUERIES_JAR)            # regex and other contrib queries
+#JARS+=$(SMARTCN_JAR)           # smart chinese analyzer
+#JARS+=$(SPATIAL_JAR)           # spatial lucene
+
 #
 # No edits required below
 #
@@ -153,6 +165,8 @@ HIGHLIGHTER_JAR=$(LUCENE)/build/contrib/highlighter/lucene-highlighter-$(LUCENE_
 MEMORY_JAR=$(LUCENE)/build/contrib/memory/lucene-memory-$(LUCENE_VER).jar
 QUERIES_JAR=$(LUCENE)/build/contrib/queries/lucene-queries-$(LUCENE_VER).jar
 EXTENSIONS_JAR=build/jar/extensions.jar
+SMARTCN_JAR=$(LUCENE)/build/contrib/analyzers/smartcn/lucene-smartcn-$(LUCENE_VER).jar
+SPATIAL_JAR=$(LUCENE)/build/contrib/spatial/lucene-spatial-$(LUCENE_VER).jar
 
 ICUPKG:=$(shell which icupkg)
 
@@ -196,9 +210,11 @@ $(QUERIES_JAR): $(LUCENE_JAR)
 $(EXTENSIONS_JAR): $(LUCENE_JAR)
 	$(ANT) -f extensions.xml -Dlucene.dir=$(LUCENE)
 
-JARS=$(LUCENE_JAR) $(ANALYZERS_JAR) \
-     $(MEMORY_JAR) $(HIGHLIGHTER_JAR) $(QUERIES_JAR) \
-     $(EXTENSIONS_JAR)
+$(SMARTCN_JAR): $(LUCENE_JAR)
+	cd $(LUCENE)/contrib/analyzers/smartcn; $(ANT) -Dversion=$(LUCENE_VER)
+
+$(SPATIAL_JAR): $(LUCENE_JAR)
+	cd $(LUCENE)/contrib/spatial; $(ANT) -Dversion=$(LUCENE_VER)
 
 JCCFLAGS?=
 
@@ -231,6 +247,7 @@ GENERATE=$(JCC) $(foreach jar,$(JARS),--jar $(jar)) \
                                java.lang.Runtime \
            --package java.util \
                      java.util.Arrays \
+                     java.util.HashSet \
                      java.text.SimpleDateFormat \
                      java.text.DecimalFormat \
                      java.text.Collator \
