@@ -120,7 +120,7 @@ LUCENE=lucene-java-$(LUCENE_VER)
 
 # Windows   (Win32, Python 2.7, Java 1.6, ant 1.8.1, Java not on PATH)
 #PREFIX_PYTHON=/cygdrive/c/Python27
-#ANT=JAVA_HOME=c:\\jdk1.6.0_22 /cygdrive/c/java/apache-ant-1.8.1/bin/ant -Dsvnversion=exported
+#ANT=JAVA_HOME=c:\\jdk1.6.0_22 /cygdrive/c/java/apache-ant-1.8.1/bin/ant
 #PYTHON=$(PREFIX_PYTHON)/python.exe
 #JCC=$(PYTHON) -m jcc --shared --find-jvm-dll
 #NUM_FILES=3
