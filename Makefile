@@ -14,10 +14,10 @@
 # site-packages directory.
 #
 
-VERSION=2.9.3-1
-LUCENE_SVN_VER=HEAD
-LUCENE_VER=2.9.3
-LUCENE_SVN=http://svn.apache.org/repos/asf/lucene/java/tags/lucene_2_9_3
+VERSION=2.9.4-1
+LUCENE_SVN_VER=1039909
+LUCENE_VER=2.9.4
+LUCENE_SVN=http://svn.apache.org/repos/asf/lucene/java/branches/lucene_2_9
 PYLUCENE:=$(shell pwd)
 LUCENE=lucene-java-$(LUCENE_VER)
 
@@ -116,6 +116,13 @@ LUCENE=lucene-java-$(LUCENE_VER)
 #ANT=JAVA_HOME=o:\\Java\\jdk1.6.0_02 /cygdrive/o/java/apache-ant-1.7.0/bin/ant
 #PYTHON=$(PREFIX_PYTHON)/python.exe
 #JCC=$(PYTHON) -m jcc --shared
+#NUM_FILES=3
+
+# Windows   (Win32, Python 2.7, Java 1.6, ant 1.8.1, Java not on PATH)
+#PREFIX_PYTHON=/cygdrive/c/Python27
+#ANT=JAVA_HOME=c:\\jdk1.6.0_22 /cygdrive/c/java/apache-ant-1.8.1/bin/ant -Dsvnversion=exported
+#PYTHON=$(PREFIX_PYTHON)/python.exe
+#JCC=$(PYTHON) -m jcc --shared --find-jvm-dll
 #NUM_FILES=3
 
 #
