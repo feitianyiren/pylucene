@@ -15,9 +15,9 @@
 #
 
 VERSION=2.9.4-1
-LUCENE_SVN_VER=1039909
+LUCENE_SVN_VER=HEAD
 LUCENE_VER=2.9.4
-LUCENE_SVN=http://svn.apache.org/repos/asf/lucene/java/branches/lucene_2_9
+LUCENE_SVN=http://svn.apache.org/repos/asf/lucene/java/tags/lucene_2_9_4
 PYLUCENE:=$(shell pwd)
 LUCENE=lucene-java-$(LUCENE_VER)
 
@@ -30,6 +30,8 @@ LUCENE=lucene-java-$(LUCENE_VER)
 # PREFIX: where programs are normally installed on your system (Unix).
 # PREFIX_PYTHON: where your version of python is installed.
 # JCC: how jcc is invoked, depending on the python version:
+#  - python 2.7:
+#      $(PYTHON) -m jcc
 #  - python 2.6:
 #      $(PYTHON) -m jcc.__main__
 #  - python 2.5:
