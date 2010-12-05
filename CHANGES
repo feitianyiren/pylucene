@@ -1,4 +1,9 @@
 
+Version 2.9.3 -> 2.9.4
+----------------------
+ - using Lucene 2.9.4 sources
+ - PyLucene built with JCC 2.7
+
 Version 2.9.2 -> 2.9.3
 ----------------------
  - using Lucene 2.9.3 sources
