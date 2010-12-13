@@ -935,7 +935,7 @@ class SortTestCase(TestCase):
         """
 
         # ScoreDoc[] result = searcher.search(query, None, 1000, sort).scoreDocs
-        hits = searcher.search(query, None, len(expectedResult), sort)
+        hits = searcher.search(query, None, len(expectedResult) or 1, sort)
         sds = hits.scoreDocs
 
         self.assertEqual(hits.totalHits, len(expectedResult))

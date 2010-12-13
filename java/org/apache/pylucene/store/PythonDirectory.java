@@ -28,6 +28,7 @@ public class PythonDirectory extends Directory {
     private long pythonObject;
 
     public PythonDirectory(LockFactory factory)
+        throws IOException
     {
         setLockFactory(factory);
     }
