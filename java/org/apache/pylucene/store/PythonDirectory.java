@@ -16,6 +16,7 @@
 package org.apache.pylucene.store;
 
 import java.io.IOException;
+import java.util.Collection;
 
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.IndexInput;
@@ -46,6 +47,13 @@ public class PythonDirectory extends Directory {
         throws Throwable
     {
         pythonDecRef();
+    }
+
+    public void sync(Collection<String> names)
+        throws IOException 
+    {
+        for (String name : names)
+            sync(name);
     }
 
     public native void pythonDecRef();
