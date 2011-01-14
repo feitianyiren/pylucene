@@ -29,7 +29,7 @@ from getopt import getopt, GetoptError
 
 from lucene import \
      Document, IndexSearcher, FSDirectory, QueryParser, StandardAnalyzer, \
-     Hit, Field, initVM, CLASSPATH
+     Field, initVM, CLASSPATH, Version
 
 if __name__ == '__main__':
     initVM(CLASSPATH)
@@ -65,17 +65,18 @@ template = CustomTemplate(format)
 fsDir = FSDirectory.getDirectory(indexDir, False)
 searcher = IndexSearcher(fsDir)
 
-parser = QueryParser("keywords", StandardAnalyzer())
+analyzer = StandardAnalyzer(Version.LUCENE_CURRENT)
+parser = QueryParser(Version.LUCENE_CURRENT, "keywords", analyzer)
 parser.setDefaultOperator(QueryParser.Operator.AND)
 query = parser.parse(' '.join(args))
 start = datetime.now()
-hits = searcher.search(query)
+scoreDocs = searcher.search(query, 50).scoreDocs
 duration = datetime.now() - start
 if stats:
     print >> sys.stderr, "Found %d document(s) (in %s) that matched query '%s':" %(len(hits), duration, query)
 
-for hit in hits:
-    doc = Hit.cast_(hit).getDocument()
+for scoreDoc in scoreDocs:
+    doc = searcher.doc(scoreDoc.doc)
     table = dict((field.name(), field.stringValue())
                  for field in (Field.cast_(f) for f in doc.getFields()))
     print template.substitute(table)

@@ -21,7 +21,7 @@
 import os, re, sys
 from subprocess import *
 from lucene import IndexWriter, StandardAnalyzer, Document, Field
-from lucene import initVM, CLASSPATH
+from lucene import initVM, CLASSPATH, Version, FSDirectory
 
 def indexDirectory(dir):
 
@@ -85,8 +85,9 @@ if __name__ == '__main__':
 
     else:
         initVM(CLASSPATH)
-        indexDir = sys.argv[1]
-        writer = IndexWriter(indexDir, StandardAnalyzer(), True)
+        indexDir = FSDirectory.getDirectory(sys.argv[1])
+        analyzer = StandardAnalyzer(Version.LUCENE_CURRENT)
+        writer = IndexWriter(indexDir, analyzer, True)
         manpath = os.environ.get('MANPATH', '/usr/share/man').split(os.pathsep)
         for dir in manpath:
             print "Crawling", dir

@@ -1,3 +1,7 @@
+Version 2.9.4 ->
+----------------
+ - fixed manindex.py and mansearch.py samples (to reflect API changes)
+ - 
 
 Version 2.9.3 -> 2.9.4
 ----------------------
