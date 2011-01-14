@@ -1,3 +1,7 @@
+Version 3.0.3 ->
+----------------
+ - fixed mansearch.py sample to reflect API change (Jean Luc Truchtersheim)
+ - 
 
 Version 3.0.2 -> 3.0.3
 ----------------------
