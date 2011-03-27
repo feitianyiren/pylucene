@@ -18,9 +18,10 @@
 VERSION=3.x-0
 LUCENE_SVN_VER=HEAD
 LUCENE_VER=3.x
-LUCENE_SVN=http://svn.apache.org/repos/asf/lucene/dev/branches/branch_3x/lucene
+LUCENE_SVN=http://svn.apache.org/repos/asf/lucene/dev/branches/branch_3x
 PYLUCENE:=$(shell pwd)
-LUCENE=lucene-java-$(LUCENE_VER)
+LUCENE_SRC=lucene-java-$(LUCENE_VER)
+LUCENE=$(LUCENE_SRC)/lucene
 
 # 
 # You need to uncomment and edit the variables below in the section
@@ -182,10 +183,12 @@ ICUPKG:=$(shell which icupkg)
 
 default: all
 
-$(LUCENE):
-	svn $(SVNOP) -r $(LUCENE_SVN_VER) $(LUCENE_SVN) $(LUCENE)
+$(LUCENE_SRC):
+	mkdir -p $(LUCENE_SRC)
+	svn $(SVNOP) -r $(LUCENE_SVN_VER) $(LUCENE_SVN)/lucene $(LUCENE_SRC)/lucene
+	svn $(SVNOP) -r $(LUCENE_SVN_VER) $(LUCENE_SVN)/common-build.xml $(LUCENE_SRC)/common-build.xml
 
-sources: $(LUCENE)
+sources: $(LUCENE_SRC)
 
 to-orig: sources
 	mkdir -p $(LUCENE)-orig
@@ -252,9 +255,9 @@ GENERATE=$(JCC) $(foreach jar,$(JARS),--jar $(jar)) \
            $(JCCFLAGS) \
            --package java.lang java.lang.System \
                                java.lang.Runtime \
-           --package java.util \
-                     java.util.Arrays \
-                     java.util.HashSet \
+           --package java.util java.util.Arrays \
+                               java.util.HashMap \
+                               java.util.HashSet \
                      java.text.SimpleDateFormat \
                      java.text.DecimalFormat \
                      java.text.Collator \
@@ -343,7 +346,7 @@ SITE=../site/build/site/en
 distrib:
 	mkdir -p distrib
 	svn export . distrib/pylucene-$(VERSION)
-	tar -cf - --exclude build $(LUCENE) | tar -C distrib/pylucene-$(VERSION) -xvf -
+	tar -cf - --exclude build $(LUCENE_SRC) | tar -C distrib/pylucene-$(VERSION) -xvf -
 	mkdir distrib/pylucene-$(VERSION)/doc
 	tar -C $(SITE) -cf - . | tar -C distrib/pylucene-$(VERSION)/doc -xvf -
 	cd distrib; tar -cvzf $(ARCHIVE) pylucene-$(VERSION)
