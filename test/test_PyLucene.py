@@ -257,8 +257,7 @@ class Test_PyLuceneBase(object):
                 term_enum.next()
             self.assertEqual(len(docids), 2)
         finally:
-            pass
-            #self.closeStore(store, reader)
+            self.closeStore(store, reader)
 
     def test_getFieldNames(self):
 
