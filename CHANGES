@@ -5,6 +5,20 @@ Version 3.1.0 -> 3.2.0
  - PyLucene built with JCC 2.9
  - rearranged Lucene source checkout tree to reflect new constraints
 
+Version 3.0.0 -> 3.1.0
+----------------------
+ - using Lucene 3.1 sources
+ - improved support for building on Windows with mingw32
+ - added wininst target to Makefile
+ - added port of ICUNormalizer2Filter using C++ ICU's Normalizer2 via PyICU 1.1
+ - added port of ICUFoldingFilter using C++ ICU's Normalizer2 via PyICU 1.1
+ - added port of ICUTransformFilter using C++ ICU's Transliterator via PyICU 1.1
+ - fixed "Lucene in Action" samples left over on old API
+ - improved support for adding optional contrib modules
+ - added --package java.util.regex to wrap constructors on PatternAnalyzer
+ - fixed mansearch.py sample to reflect API changes
+ - PyLucene built with JCC 2.8
+
 Version 2.9.0 -> 3.0.0
 ----------------------
  - unit tests ported to new API
