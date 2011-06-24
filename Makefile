@@ -186,7 +186,6 @@ default: all
 $(LUCENE_SRC):
 	mkdir -p $(LUCENE_SRC)
 	svn $(SVNOP) -r $(LUCENE_SVN_VER) $(LUCENE_SVN)/lucene $(LUCENE_SRC)/lucene
-	svn $(SVNOP) -r $(LUCENE_SVN_VER) $(LUCENE_SVN)/common-build.xml $(LUCENE_SRC)/common-build.xml
 
 sources: $(LUCENE_SRC)
 
