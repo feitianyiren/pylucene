@@ -307,7 +307,7 @@ clean:
 	rm -rf $(LUCENE)/build build
 
 realclean:
-	if test ! -d $(LUCENE)/.svn; then rm -rf $(LUCENE); else rm -rf $(LUCENE)/build; fi
+	if test ! -d $(LUCENE)/.svn; then rm -rf $(LUCENE_SRC); else rm -rf $(LUCENE)/build; fi
 	rm -rf build samples/LuceneInAction/index
 
 OS=$(shell uname)
