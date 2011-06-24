@@ -23,7 +23,7 @@ import org.apache.lucene.index.IndexReader;
  * @author Andi Vajda
  */
 
-public class PythonFieldComparator extends FieldComparator {
+public class PythonFieldComparator<T> extends FieldComparator<T> {
 
     private long pythonObject;
 
@@ -56,5 +56,5 @@ public class PythonFieldComparator extends FieldComparator {
         throws IOException;
     public native void setNextReader(IndexReader reader, int docBase)
         throws IOException;
-    public native Comparable value(int slot);
+    public native T value(int slot);
 }

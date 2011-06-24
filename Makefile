@@ -15,10 +15,10 @@
 # site-packages directory.
 #
 
-VERSION=3.x-0
+VERSION=3.3-0
 LUCENE_SVN_VER=HEAD
-LUCENE_VER=3.x
-LUCENE_SVN=http://svn.apache.org/repos/asf/lucene/dev/branches/branch_3x
+LUCENE_VER=3.3
+LUCENE_SVN=http://svn.apache.org/repos/asf/lucene/dev/branches/lucene_solr_3_3
 PYLUCENE:=$(shell pwd)
 LUCENE_SRC=lucene-java-$(LUCENE_VER)
 LUCENE=$(LUCENE_SRC)/lucene
@@ -186,7 +186,6 @@ default: all
 $(LUCENE_SRC):
 	mkdir -p $(LUCENE_SRC)
 	svn $(SVNOP) -r $(LUCENE_SVN_VER) $(LUCENE_SVN)/lucene $(LUCENE_SRC)/lucene
-	svn $(SVNOP) -r $(LUCENE_SVN_VER) $(LUCENE_SVN)/common-build.xml $(LUCENE_SRC)/common-build.xml
 
 sources: $(LUCENE_SRC)
 
@@ -308,7 +307,7 @@ clean:
 	rm -rf $(LUCENE)/build build
 
 realclean:
-	if test ! -d $(LUCENE)/.svn; then rm -rf $(LUCENE); else rm -rf $(LUCENE)/build; fi
+	if test ! -d $(LUCENE)/.svn; then rm -rf $(LUCENE_SRC); else rm -rf $(LUCENE)/build; fi
 	rm -rf build samples/LuceneInAction/index
 
 OS=$(shell uname)
