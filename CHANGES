@@ -1,12 +1,16 @@
 
-Version 3.2.0 -> 3.3.0
-----------------------
- - using Lucene 3.3 sources
- - adapted to FieldComparator becoming generic
+Version 3.3 ->
+------------------
+ - added grouping contrib module to build
  - 
 
-Version 3.1.0 -> 3.2.0
-----------------------
+Version 3.2 -> 3.3
+------------------
+ - using Lucene 3.3 sources
+ - adapted to FieldComparator becoming generic
+
+Version 3.1.0 -> 3.2
+--------------------
  - using Lucene 3.2 sources
  - PyLucene built with JCC 2.9
  - rearranged Lucene source checkout tree to reflect new constraints

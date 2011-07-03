@@ -151,8 +151,9 @@ JARS+=$(MEMORY_JAR)             # single-document memory index
 JARS+=$(HIGHLIGHTER_JAR)        # needs memory contrib
 JARS+=$(EXTENSIONS_JAR)         # needs highlighter contrib
 JARS+=$(QUERIES_JAR)            # regex and other contrib queries
-#JARS+=$(SMARTCN_JAR)           # smart chinese analyzer
-#JARS+=$(SPATIAL_JAR)           # spatial lucene
+#JARS+=$(SMARTCN_JAR)            # smart chinese analyzer
+#JARS+=$(SPATIAL_JAR)            # spatial lucene
+JARS+=$(GROUPING_JAR)           # grouping module
 
 
 #
@@ -175,6 +176,7 @@ QUERIES_JAR=$(LUCENE)/build/contrib/queries/lucene-queries-$(LUCENE_VER).jar
 EXTENSIONS_JAR=build/jar/extensions.jar
 SMARTCN_JAR=$(LUCENE)/build/contrib/analyzers/smartcn/lucene-smartcn-$(LUCENE_VER).jar
 SPATIAL_JAR=$(LUCENE)/build/contrib/spatial/lucene-spatial-$(LUCENE_VER).jar
+GROUPING_JAR=$(LUCENE)/build/contrib/grouping/lucene-grouping-$(LUCENE_VER).jar
 
 ICUPKG:=$(shell which icupkg)
 
@@ -224,6 +226,9 @@ $(SMARTCN_JAR): $(LUCENE_JAR)
 
 $(SPATIAL_JAR): $(LUCENE_JAR)
 	cd $(LUCENE)/contrib/spatial; $(ANT) -Dversion=$(LUCENE_VER)
+
+$(GROUPING_JAR): $(LUCENE_JAR)
+	cd $(LUCENE)/contrib/grouping; $(ANT) -Dversion=$(LUCENE_VER)
 
 JCCFLAGS?=
 
