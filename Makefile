@@ -153,7 +153,7 @@ JARS+=$(EXTENSIONS_JAR)         # needs highlighter contrib
 JARS+=$(QUERIES_JAR)            # regex and other contrib queries
 #JARS+=$(SMARTCN_JAR)            # smart chinese analyzer
 #JARS+=$(SPATIAL_JAR)            # spatial lucene
-#JARS+=$(GROUPING_JAR)           # grouping module
+JARS+=$(GROUPING_JAR)           # grouping module
 
 
 #
