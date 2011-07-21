@@ -15,7 +15,7 @@
 # site-packages directory.
 #
 
-VERSION=3.3-2
+VERSION=3.3-3
 LUCENE_SVN_VER=HEAD
 LUCENE_VER=3.3
 LUCENE_SVN=http://svn.apache.org/repos/asf/lucene/dev/tags/lucene_solr_3_3
@@ -176,6 +176,7 @@ QUERIES_JAR=$(LUCENE)/build/contrib/queries/lucene-queries-$(LUCENE_VER).jar
 EXTENSIONS_JAR=build/jar/extensions.jar
 SMARTCN_JAR=$(LUCENE)/build/contrib/analyzers/smartcn/lucene-smartcn-$(LUCENE_VER).jar
 SPATIAL_JAR=$(LUCENE)/build/contrib/spatial/lucene-spatial-$(LUCENE_VER).jar
+GROUPING_JAR=$(LUCENE)/build/contrib/grouping/lucene-grouping-$(LUCENE_VER).jar
 
 ICUPKG:=$(shell which icupkg)
 
@@ -225,6 +226,9 @@ $(SMARTCN_JAR): $(LUCENE_JAR)
 
 $(SPATIAL_JAR): $(LUCENE_JAR)
 	cd $(LUCENE)/contrib/spatial; $(ANT) -Dversion=$(LUCENE_VER)
+
+$(GROUPING_JAR): $(LUCENE_JAR)
+	cd $(LUCENE)/contrib/grouping; $(ANT) -Dversion=$(LUCENE_VER)
 
 JCCFLAGS?=
 
