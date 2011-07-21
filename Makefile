@@ -15,7 +15,7 @@
 # site-packages directory.
 #
 
-VERSION=3.3-1
+VERSION=3.3-2
 LUCENE_SVN_VER=HEAD
 LUCENE_VER=3.3
 LUCENE_SVN=http://svn.apache.org/repos/asf/lucene/dev/tags/lucene_solr_3_3
@@ -151,8 +151,9 @@ JARS+=$(MEMORY_JAR)             # single-document memory index
 JARS+=$(HIGHLIGHTER_JAR)        # needs memory contrib
 JARS+=$(EXTENSIONS_JAR)         # needs highlighter contrib
 JARS+=$(QUERIES_JAR)            # regex and other contrib queries
-#JARS+=$(SMARTCN_JAR)           # smart chinese analyzer
-#JARS+=$(SPATIAL_JAR)           # spatial lucene
+#JARS+=$(SMARTCN_JAR)            # smart chinese analyzer
+#JARS+=$(SPATIAL_JAR)            # spatial lucene
+JARS+=$(GROUPING_JAR)           # grouping module
 
 
 #
