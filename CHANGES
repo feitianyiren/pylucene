@@ -1,7 +1,8 @@
 
-Version 3.3 ->
+Version 3.3 -> 3.4
 ------------------
- - 
+ - added new join contrib module to build
+ - PyLucene built with JCC 2.11
 
 Version 3.2 -> 3.3
 ------------------
