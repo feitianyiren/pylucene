@@ -323,7 +323,7 @@ clean:
 
 realclean:
 	if test ! -d $(LUCENE)/.svn; then rm -rf $(LUCENE_SRC); else rm -rf $(LUCENE)/build; fi
-	rm -rf build samples/LuceneInAction/index
+	rm -rf build samples/LuceneInAction/index samples/LuceneInAction/indexes
 
 OS=$(shell uname)
 BUILD_TEST:=$(PYLUCENE)/build/test
@@ -352,6 +352,7 @@ test: install-test samples/LuceneInAction/index
 	PYTHONPATH=$(BUILD_TEST) $(PYTHON) samples/LuceneInAction/Explainer.py samples/LuceneInAction/index programming
 	PYTHONPATH=$(BUILD_TEST) $(PYTHON) samples/LuceneInAction/HighlightIt.py
 	PYTHONPATH=$(BUILD_TEST) $(PYTHON) samples/LuceneInAction/SortingExample.py
+	PYTHONPATH=$(BUILD_TEST) $(PYTHON) samples/LuceneInAction/SynonymAnalyzerViewer.py
 
 
 ARCHIVE=pylucene-$(VERSION)-src.tar.gz

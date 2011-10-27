@@ -1,6 +1,7 @@
 Version 3.4 ->
 ------------------
  - added facet contrib module to build
+ - refreshed SynonymAnalyzerViewer sample and wordnet index (Thomas Koch)
  - 
 
 Version 3.3 -> 3.4
