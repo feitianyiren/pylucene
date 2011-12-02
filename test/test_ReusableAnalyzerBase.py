@@ -19,10 +19,17 @@ from lucene import *
 # Test reusableTokenStream, using ReusableAnalyzerBase:
 class MyAnalyzer(PythonReusableAnalyzerBase):
 
+    def initReader(self, reader):
+        return reader
+
     def createComponents(self, field, reader):
+
         first = LowerCaseTokenizer(Version.LUCENE_CURRENT, reader)
-        last = StopFilter(Version.LUCENE_CURRENT, first, StopAnalyzer.ENGLISH_STOP_WORDS_SET)
+        last = StopFilter(Version.LUCENE_CURRENT, first,
+                          StopAnalyzer.ENGLISH_STOP_WORDS_SET)
+
         return ReusableAnalyzerBase.TokenStreamComponents(first, last)
+
 
 class ReusableAnalyzerBaseTestCase(TestCase):
 
@@ -41,6 +48,7 @@ class ReusableAnalyzerBaseTestCase(TestCase):
                     self.assert_(termAtt.term() not in StopAnalyzer.ENGLISH_STOP_WORDS_SET)
                     count += 1
                 self.assertEquals(4, count)
+
 
 if __name__ == "__main__":
     import sys, lucene

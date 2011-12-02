@@ -19,7 +19,6 @@ import org.apache.lucene.analysis.ReusableAnalyzerBase;
 import java.io.Reader;
 
 public class PythonReusableAnalyzerBase extends ReusableAnalyzerBase {
-
     private long pythonObject;
 
     public PythonReusableAnalyzerBase()
@@ -42,6 +41,9 @@ public class PythonReusableAnalyzerBase extends ReusableAnalyzerBase {
     }
 
     public native void pythonDecRef();
+
+    @Override                                                                   
+    public native Reader initReader(Reader reader);
 
     @Override
     public native TokenStreamComponents createComponents(String fieldName, Reader reader);
