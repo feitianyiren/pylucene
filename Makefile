@@ -50,98 +50,98 @@ LUCENE=$(LUCENE_SRC)/lucene
 #ANT=ant
 #PYTHON=$(PREFIX_PYTHON)/bin/python
 #JCC=$(PYTHON) -m jcc.__main__ --shared --arch x86_64
-#NUM_FILES=3
+#NUM_FILES=4
 
 # Mac OS X 10.6 (MacPorts 1.8.0 64-bit Python 2.7, Java 1.6)
 #PREFIX_PYTHON=/opt/local
 #ANT=ant
 #PYTHON=$(PREFIX_PYTHON)/bin/python
 #JCC=$(PYTHON) -m jcc --shared --arch x86_64
-#NUM_FILES=3
+#NUM_FILES=4
 
 # Mac OS X 10.6 (MacPorts 1.8.0 64-bit Python 2.6, Java 1.6)
 #PREFIX_PYTHON=/opt/local
 #ANT=ant
 #PYTHON=$(PREFIX_PYTHON)/bin/python
 #JCC=$(PYTHON) -m jcc.__main__ --shared --arch x86_64
-#NUM_FILES=3
+#NUM_FILES=4
 
 # Mac OS X 10.6 (64-bit and 32-bit Python 2.6 together, Java 1.6)
 #PREFIX_PYTHON=/usr
 #ANT=ant
 #PYTHON=$(PREFIX_PYTHON)/bin/python
 #JCC=$(PYTHON) -m jcc.__main__ --shared --arch x86_64 --arch i386
-#NUM_FILES=3
+#NUM_FILES=4
 
 # Mac OS X 10.5 (32-bit Python 2.5, Java 1.5)
 #PREFIX_PYTHON=/usr
 #ANT=ant
 #PYTHON=$(PREFIX_PYTHON)/bin/python
 #JCC=$(PYTHON) -m jcc --shared
-#NUM_FILES=3
+#NUM_FILES=4
 
 # Mac OS X  (Python 2.3.5, Java 1.5, setuptools 0.6c7, Intel Mac OS X 10.4)
 #PREFIX_PYTHON=/usr
 #ANT=ant
 #PYTHON=$(PREFIX_PYTHON)/bin/python
 #JCC=$(PYTHON) /System/Library/Frameworks/Python.framework/Versions/2.3/lib/python2.3/site-packages/JCC-2.3-py2.3-macosx-10.4-i386.egg/jcc/__init__.py
-#NUM_FILES=3
+#NUM_FILES=4
 
 # Mac OS X  (Python 2.3.5, Java 1.5, setuptools 0.6c7, PPC Mac OS X 10.4)
 #PREFIX_PYTHON=/usr
 #ANT=ant
 #PYTHON=$(PREFIX_PYTHON)/bin/python
 #JCC=$(PYTHON) /System/Library/Frameworks/Python.framework/Versions/2.3/lib/python2.3/site-packages/JCC-2.3-py2.3-macosx-10.4-ppc.egg/jcc/__init__.py
-#NUM_FILES=3
+#NUM_FILES=4
 
 # Linux     (Ubuntu 6.06, Python 2.4, Java 1.5, no setuptools)
 #PREFIX_PYTHON=/usr
 #ANT=ant
 #PYTHON=$(PREFIX_PYTHON)/bin/python
 #JCC=$(PYTHON) $(PREFIX_PYTHON)/lib/python2.4/site-packages/jcc/__init__.py
-#NUM_FILES=3
+#NUM_FILES=4
 
 # Linux     (Ubuntu 8.10 64-bit, Python 2.5.2, OpenJDK 1.6, setuptools 0.6c9)
 #PREFIX_PYTHON=/usr
 #ANT=ant
 #PYTHON=$(PREFIX_PYTHON)/bin/python
 #JCC=$(PYTHON) -m jcc --shared
-#NUM_FILES=3
+#NUM_FILES=4
 
 # FreeBSD
 #PREFIX_PYTHON=/usr
 #ANT=ant
 #PYTHON=$(PREFIX_PYTHON)/bin/python
 #JCC=$(PYTHON) -m jcc
-#NUM_FILES=3
+#NUM_FILES=4
 
 # Solaris   (Solaris 11, Python 2.4 32-bit, Sun Studio 12, Java 1.6)
 #PREFIX_PYTHON=/usr
 #ANT=/usr/local/apache-ant-1.7.0/bin/ant
 #PYTHON=$(PREFIX_PYTHON)/bin/python
 #JCC=$(PYTHON) $(PREFIX_PYTHON)/lib/python2.4/site-packages/jcc/__init__.py
-#NUM_FILES=3
+#NUM_FILES=4
 
 # Windows   (Win32, Python 2.5.1, Java 1.6, ant 1.7.0)
 #PREFIX_PYTHON=/cygdrive/o/Python-2.5.2/PCbuild
 #ANT=JAVA_HOME=o:\\Java\\jdk1.6.0_02 /cygdrive/o/java/apache-ant-1.7.0/bin/ant
 #PYTHON=$(PREFIX_PYTHON)/python.exe
 #JCC=$(PYTHON) -m jcc --shared
-#NUM_FILES=3
+#NUM_FILES=4
 
 # Windows   (Win32, msys/MinGW, Python 2.6.4, Java 1.6, ant 1.7.1 (WinAnt))
 #PREFIX_PYTHON=/c/Python26
 #ANT=JAVA_HOME="c:\\Program Files\\Java\\jdk1.6.0_18" "/c/Program Files/WinAnt/bin/ant"
 #PYTHON=$(PREFIX_PYTHON)/python.exe
 #JCC=$(PYTHON) -m jcc.__main__ --shared --compiler mingw32
-#NUM_FILES=3
+#NUM_FILES=4
 
 # Windows   (Win32, Python 2.7, Java 1.6, ant 1.8.1, Java not on PATH)
 #PREFIX_PYTHON=/cygdrive/c/Python27
 #ANT=JAVA_HOME=c:\\jdk1.6.0_22 /cygdrive/c/java/apache-ant-1.8.1/bin/ant
 #PYTHON=$(PREFIX_PYTHON)/python.exe
 #JCC=$(PYTHON) -m jcc --shared --find-jvm-dll
-#NUM_FILES=3
+#NUM_FILES=4
 
 JARS=$(LUCENE_JAR)
 
@@ -156,6 +156,7 @@ JARS+=$(QUERIES_JAR)            # regex and other contrib queries
 JARS+=$(GROUPING_JAR)           # grouping module
 JARS+=$(JOIN_JAR)               # join module
 JARS+=$(FACET_JAR)              # facet module
+JARS+=$(SPELLCHECKER_JAR)       # spellchecker/suggest module
 
 
 #
@@ -181,6 +182,7 @@ SPATIAL_JAR=$(LUCENE)/build/contrib/spatial/lucene-spatial-$(LUCENE_VER).jar
 GROUPING_JAR=$(LUCENE)/build/contrib/grouping/lucene-grouping-$(LUCENE_VER).jar
 JOIN_JAR=$(LUCENE)/build/contrib/join/lucene-join-$(LUCENE_VER).jar
 FACET_JAR=$(LUCENE)/build/contrib/facet/lucene-facet-$(LUCENE_VER).jar
+SPELLCHECKER_JAR=$(LUCENE)/build/contrib/spellchecker/lucene-spellchecker-$(LUCENE_VER).jar
 
 ICUPKG:=$(shell which icupkg)
 
@@ -239,6 +241,9 @@ $(JOIN_JAR): $(LUCENE_JAR)
 
 $(FACET_JAR): $(LUCENE_JAR)
 	cd $(LUCENE)/contrib/facet; $(ANT) -Dversion=$(LUCENE_VER)
+
+$(SPELLCHECKER_JAR): $(LUCENE_JAR)
+	cd $(LUCENE)/contrib/spellchecker; $(ANT) -Dversion=$(LUCENE_VER)
 
 JCCFLAGS?=
 
