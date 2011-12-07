@@ -6,7 +6,7 @@ Version 3.4 -> 3.5.0
  - added PythonReusableAnalyzerBase (Michael McCandless)
  - added PythonIndexDeletionPolicy.java (Michael McCandless)
  - added spellchecker contrib module to build
- - 
+ - PyLucene built with JCC 2.12
 
 Version 3.3 -> 3.4
 ------------------
