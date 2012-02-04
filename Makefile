@@ -288,6 +288,7 @@ GENERATE=$(JCC) $(foreach jar,$(JARS),--jar $(jar)) \
            --exclude org.apache.lucene.queryParser.TokenMgrError \
            --exclude org.apache.lucene.queryParser.QueryParserTokenManager \
            --exclude org.apache.lucene.queryParser.ParseException \
+           --exclude org.apache.lucene.queryParser.CharStream \
            --exclude org.apache.lucene.search.regex.JakartaRegexpCapabilities \
            --exclude org.apache.regexp.RegexpTunnel \
            --exclude org.apache.lucene.analysis.cn.smart.AnalyzerProfile \
@@ -296,6 +297,15 @@ GENERATE=$(JCC) $(foreach jar,$(JARS),--jar $(jar)) \
            --mapping java.util.Properties 'getProperty:(Ljava/lang/String;)Ljava/lang/String;' \
            --sequence java.util.AbstractList 'size:()I' 'get:(I)Ljava/lang/Object;' \
            --rename org.apache.lucene.search.highlight.SpanScorer=HighlighterSpanScorer \
+           --rename org.apache.lucene.search.highlight.Scorer=HighlighterScorer \
+           --rename org.apache.lucene.search.spell.Dictionary=SpellDictionary \
+           --rename org.apache.lucene.search.suggest.fst.Sort=SuggestSort \
+           --rename org.apache.lucene.store.DataInput=StoreDataInput \
+           --rename org.apache.lucene.store.DataOutput=StoreDataOutput \
+           --rename org.tartarus.snowball.ext.DutchStemmer=SnowballDutchStemmer \
+           --rename org.tartarus.snowball.ext.FrenchStemmer=SnowballFrenchStemmer \
+           --rename org.tartarus.snowball.ext.GermanStemmer=SnowballGermanStemmer \
+           --rename org.tartarus.snowball.ext.PortugueseStemmer=SnowballPortugueseStemmer \
            --version $(LUCENE_VER) \
            --module python/collections.py \
            --module python/ICUNormalizer2Filter.py \

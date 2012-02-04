@@ -1,3 +1,8 @@
+Version 3.5.0 ->
+---------------------
+ - renamed classes whose python name would not be unique in lucene module
+ - 
+
 Version 3.4 -> 3.5.0
 --------------------
  - using Lucene 3.5 sources
