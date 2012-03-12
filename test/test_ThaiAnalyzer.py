@@ -23,8 +23,7 @@ class ThaiAnalyzerTestCase(BaseTokenStreamTestCase):
     def testOffsets(self):
         self.assert_(ThaiWordFilter.DBBI_AVAILABLE,
                      "JRE does not support Thai dictionary-based BreakIterator")
-
-        self._assertAnalyzesTo(ThaiAnalyzer(Version.LUCENE_CURRENT),
+        self._assertAnalyzesTo(ThaiAnalyzer(Version.LUCENE_35),
                                u"การที่ได้ต้องแสดงว่างานดี", 
                                [ u"การ", u"ที่", u"ได้", u"ต้อง", u"แสดง",
                                  u"ว่า", u"งาน", u"ดี" ],
@@ -35,7 +34,7 @@ class ThaiAnalyzerTestCase(BaseTokenStreamTestCase):
         self.assert_(ThaiWordFilter.DBBI_AVAILABLE,
                      "JRE does not support Thai dictionary-based BreakIterator")
 
-        self._assertAnalyzesTo(ThaiAnalyzer(Version.LUCENE_CURRENT),
+        self._assertAnalyzesTo(ThaiAnalyzer(Version.LUCENE_35),
                                u"การที่ได้ต้องแสดงว่างานดี ๑๒๓", 
                                [ u"การ", u"ที่", u"ได้", u"ต้อง", u"แสดง",
                                  u"ว่า", u"งาน", u"ดี", u"๑๒๓" ],
@@ -50,7 +49,7 @@ class ThaiAnalyzerTestCase(BaseTokenStreamTestCase):
         self.assert_(ThaiWordFilter.DBBI_AVAILABLE,
                      "JRE does not support Thai dictionary-based BreakIterator")
 
-        analyzer = ThaiAnalyzer(Version.LUCENE_CURRENT)
+        analyzer = ThaiAnalyzer(Version.LUCENE_35)
 
         self._assertAnalyzesTo(analyzer, u"การที่ได้ต้อง the แสดงว่างานดี", 
                                [ u"การ", u"ที่", u"ได้", u"ต้อง", u"แสดง",

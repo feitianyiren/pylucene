@@ -171,7 +171,7 @@ endif
 
 DEFINES=-DPYLUCENE_VER="\"$(VERSION)\"" -DLUCENE_VER="\"$(LUCENE_VER)\""
 
-LUCENE_JAR=$(LUCENE)/build/lucene-core-$(LUCENE_VER).jar
+LUCENE_JAR=$(LUCENE)/build/core/lucene-core-$(LUCENE_VER).jar
 ANALYZERS_JAR=$(LUCENE)/build/contrib/analyzers/common/lucene-analyzers-$(LUCENE_VER).jar
 HIGHLIGHTER_JAR=$(LUCENE)/build/contrib/highlighter/lucene-highlighter-$(LUCENE_VER).jar
 MEMORY_JAR=$(LUCENE)/build/contrib/memory/lucene-memory-$(LUCENE_VER).jar
@@ -274,9 +274,12 @@ GENERATE=$(JCC) $(foreach jar,$(JARS),--jar $(jar)) \
            $(JCCFLAGS) \
            --package java.lang java.lang.System \
                                java.lang.Runtime \
+                               java.lang.IllegalStateException \
+                               java.lang.IndexOutOfBoundsException \
            --package java.util java.util.Arrays \
                                java.util.HashMap \
                                java.util.HashSet \
+                               java.util.NoSuchElementException \
                      java.text.SimpleDateFormat \
                      java.text.DecimalFormat \
                      java.text.Collator \
@@ -302,10 +305,10 @@ GENERATE=$(JCC) $(foreach jar,$(JARS),--jar $(jar)) \
            --rename org.apache.lucene.search.suggest.fst.Sort=SuggestSort \
            --rename org.apache.lucene.store.DataInput=StoreDataInput \
            --rename org.apache.lucene.store.DataOutput=StoreDataOutput \
-           --rename org.tartarus.snowball.ext.DutchStemmer=SnowballDutchStemmer \
-           --rename org.tartarus.snowball.ext.FrenchStemmer=SnowballFrenchStemmer \
-           --rename org.tartarus.snowball.ext.GermanStemmer=SnowballGermanStemmer \
-           --rename org.tartarus.snowball.ext.PortugueseStemmer=SnowballPortugueseStemmer \
+           --rename org.tartarus.snowball.ext.DutchStemmer=DutchPorterStemmer \
+           --rename org.tartarus.snowball.ext.FrenchStemmer=FrenchPorterStemmer \
+           --rename org.tartarus.snowball.ext.GermanStemmer=GermanPorterStemmer \
+           --rename org.tartarus.snowball.ext.PortugueseStemmer=PortuguesePorterStemmer \
            --version $(LUCENE_VER) \
            --module python/collections.py \
            --module python/ICUNormalizer2Filter.py \
