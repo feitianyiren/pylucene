@@ -94,11 +94,13 @@ LUCENE=$(LUCENE_SRC)/lucene
 #JCC=$(PYTHON) /System/Library/Frameworks/Python.framework/Versions/2.3/lib/python2.3/site-packages/JCC-2.3-py2.3-macosx-10.4-ppc.egg/jcc/__init__.py
 #NUM_FILES=4
 
-# Linux     (Ubuntu 6.06, Python 2.4, Java 1.5, no setuptools)
+# Linux     (Ubuntu 11.10 64-bit, Python 2.7.2, OpenJDK 1.7, setuptools 0.6.16)
+# Be sure to also set JDK['linux2'] in jcc's setup.py to the JAVA_HOME value
+# used below for ANT (and rebuild jcc after changing it).
 #PREFIX_PYTHON=/usr
-#ANT=ant
+#ANT=JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64 /usr/bin/ant
 #PYTHON=$(PREFIX_PYTHON)/bin/python
-#JCC=$(PYTHON) $(PREFIX_PYTHON)/lib/python2.4/site-packages/jcc/__init__.py
+#JCC=$(PYTHON) -m jcc --shared
 #NUM_FILES=4
 
 # Linux     (Ubuntu 8.10 64-bit, Python 2.5.2, OpenJDK 1.6, setuptools 0.6c9)
@@ -106,6 +108,13 @@ LUCENE=$(LUCENE_SRC)/lucene
 #ANT=ant
 #PYTHON=$(PREFIX_PYTHON)/bin/python
 #JCC=$(PYTHON) -m jcc --shared
+#NUM_FILES=4
+
+# Linux     (Ubuntu 6.06, Python 2.4, Java 1.5, no setuptools)
+#PREFIX_PYTHON=/usr
+#ANT=ant
+#PYTHON=$(PREFIX_PYTHON)/bin/python
+#JCC=$(PYTHON) $(PREFIX_PYTHON)/lib/python2.4/site-packages/jcc/__init__.py
 #NUM_FILES=4
 
 # FreeBSD

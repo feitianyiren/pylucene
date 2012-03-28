@@ -1,6 +1,7 @@
 Version 3.5.0 ->
 ---------------------
  - renamed classes whose python name would not be unique in lucene module
+ - refreshed Linux build options, added an OpenJDK 7 example
  - 
 
 Version 3.4 -> 3.5.0
