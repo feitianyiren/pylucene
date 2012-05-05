@@ -383,14 +383,11 @@ test: install-test samples/LuceneInAction/index
 
 
 ARCHIVE=pylucene-$(VERSION)-src.tar.gz
-SITE=../site/build/site/en
 
 distrib:
 	mkdir -p distrib
 	svn export . distrib/pylucene-$(VERSION)
 	tar -cf - --exclude build $(LUCENE_SRC) | tar -C distrib/pylucene-$(VERSION) -xvf -
-	mkdir distrib/pylucene-$(VERSION)/doc
-	tar -C $(SITE) -cf - . | tar -C distrib/pylucene-$(VERSION)/doc -xvf -
 	cd distrib; tar -cvzf $(ARCHIVE) pylucene-$(VERSION)
 	cd distrib; gpg2 --armor --output $(ARCHIVE).asc --detach-sig $(ARCHIVE)
 	cd distrib; openssl md5 < $(ARCHIVE) > $(ARCHIVE).md5
