@@ -196,7 +196,7 @@ SPELLCHECKER_JAR=$(LUCENE)/build/contrib/spellchecker/lucene-spellchecker-$(LUCE
 ICUPKG:=$(shell which icupkg)
 
 .PHONY: generate compile install default all clean realclean \
-	sources test jars distrib
+	sources ivy test jars distrib
 
 default: all
 
@@ -205,6 +205,9 @@ $(LUCENE_SRC):
 	svn $(SVNOP) -r $(LUCENE_SVN_VER) $(LUCENE_SVN)/lucene $(LUCENE_SRC)/lucene
 
 sources: $(LUCENE_SRC)
+
+ivy:
+	cd $(LUCENE); ($(ANT) ivy-fail || $(ANT) ivy-bootstrap)
 
 to-orig: sources
 	mkdir -p $(LUCENE)-orig
@@ -341,7 +344,7 @@ bdist: jars
 wininst: jars
 	$(GENERATE) --wininst
 
-all: sources jars resources compile
+all: sources ivy jars resources compile
 	@echo build of $(PYLUCENE_LIB) complete
 
 clean:
