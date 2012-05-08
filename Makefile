@@ -15,7 +15,7 @@
 # site-packages directory.
 #
 
-VERSION=3.6.0-1
+VERSION=3.6.0-2
 LUCENE_SVN_VER=HEAD
 LUCENE_VER=3.6.0
 LUCENE_SVN=http://svn.apache.org/repos/asf/lucene/dev/tags/lucene_solr_3_6_0
