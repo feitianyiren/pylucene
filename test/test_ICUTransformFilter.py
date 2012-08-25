@@ -80,13 +80,16 @@ if __name__ == "__main__":
     except ImportError:
         pass
     else:
-        lucene.initVM()
-        if '-loop' in sys.argv:
-            sys.argv.remove('-loop')
-            while True:
-                try:
-                    main()
-                except:
-                    pass
+        if icu.ICU_VERSION < '49':
+            lucene.initVM()
+            if '-loop' in sys.argv:
+                sys.argv.remove('-loop')
+                while True:
+                    try:
+                        main()
+                    except:
+                        pass
+            else:
+                 main()
         else:
-             main()
+            print >>sys.stderr, "ICU version < 49 is required, running:", icu.ICU_VERSION
