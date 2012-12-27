@@ -366,7 +366,7 @@ else
   endif
 endif
 
-install-test:
+install-test: all
 	mkdir -p $(BUILD_TEST)
 	PYTHONPATH=$(BUILD_TEST) $(GENERATE) --install $(DEBUG_OPT) --install-dir $(BUILD_TEST)
 
