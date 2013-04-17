@@ -145,16 +145,6 @@ LUCENE=$(LUCENE_SRC)/lucene
 #JCC=$(PYTHON) -m jcc --shared --find-jvm-dll
 #NUM_FILES=8
 
-ifeq ($(ANT),)
-  $(error ANT is not defined, please edit Makefile as required at top)
-else ifeq ($(PYTHON),)
-  $(error PYTHON is not defined, please edit Makefile as required at top)
-else ifeq ($(JCC),)
-  $(error JCC is not defined, please edit Makefile as required at top)
-else ifeq ($(NUM_FILES),)
-  $(error NUM_FILES is not defined, please edit Makefile as required at top)
-endif
-
 JARS=$(LUCENE_JAR)
 
 # comment/uncomment the desired/undesired optional contrib modules below
@@ -214,6 +204,15 @@ $(LUCENE_SRC):
 sources: $(LUCENE_SRC)
 
 ivy:
+ifeq ($(ANT),)
+	$(error ANT is not defined, please edit Makefile as required at top)
+else ifeq ($(PYTHON),)
+	$(error PYTHON is not defined, please edit Makefile as required at top)
+else ifeq ($(JCC),)
+	$(error JCC is not defined, please edit Makefile as required at top)
+else ifeq ($(NUM_FILES),)
+	$(error NUM_FILES is not defined, please edit Makefile as required at top)
+endif
 	cd $(LUCENE); ($(ANT) ivy-fail || $(ANT) ivy-bootstrap)
 
 to-orig: sources
@@ -280,7 +279,9 @@ ifneq ($(ICUPKG),)
 ICURES= $(LUCENE)/analysis/icu/src/resources
 RESOURCES=--resources $(ICURES)
 
+ifneq ($(PYTHON),)
 ENDIANNESS:=$(shell $(PYTHON) -c "import struct; print struct.pack('h', 1) == '\000\001' and 'b' or 'l'")
+endif
 
 resources: $(ICURES)/org/apache/lucene/analysis/icu/utr30.dat
 
@@ -355,7 +356,7 @@ clean:
 	rm -rf $(LUCENE)/build build
 
 realclean:
-	if test ! -d $(LUCENE)/.svn; then rm -rf $(LUCENE) lucene; else rm -rf $(LUCENE)/build; fi
+	if test ! -d $(LUCENE_SRC)/.svn; then rm -rf $(LUCENE_SRC) lucene.egg-info; else rm -rf $(LUCENE)/build; fi
 	rm -rf build
 
 OS=$(shell uname)
