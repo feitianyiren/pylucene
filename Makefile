@@ -15,7 +15,7 @@
 # site-packages directory.
 #
 
-VERSION=4.2.1-0
+VERSION=4.2.1-1
 LUCENE_SVN_VER=HEAD
 LUCENE_VER=4.2.1
 LUCENE_SVN=http://svn.apache.org/repos/asf/lucene/dev/tags/lucene_solr_4_2_1
@@ -145,6 +145,16 @@ LUCENE=$(LUCENE_SRC)/lucene
 #JCC=$(PYTHON) -m jcc --shared --find-jvm-dll
 #NUM_FILES=8
 
+ifeq ($(ANT),)
+  $(error ANT is not defined, please edit Makefile as required at top)
+else ifeq ($(PYTHON),)
+  $(error PYTHON is not defined, please edit Makefile as required at top)
+else ifeq ($(JCC),)
+  $(error JCC is not defined, please edit Makefile as required at top)
+else ifeq ($(NUM_FILES),)
+  $(error NUM_FILES is not defined, please edit Makefile as required at top)
+endif
+
 JARS=$(LUCENE_JAR)
 
 # comment/uncomment the desired/undesired optional contrib modules below
@@ -269,6 +279,7 @@ ifneq ($(ICUPKG),)
 
 ICURES= $(LUCENE)/analysis/icu/src/resources
 RESOURCES=--resources $(ICURES)
+
 ENDIANNESS:=$(shell $(PYTHON) -c "import struct; print struct.pack('h', 1) == '\000\001' and 'b' or 'l'")
 
 resources: $(ICURES)/org/apache/lucene/analysis/icu/utr30.dat
@@ -369,11 +380,11 @@ ARCHIVE=pylucene-$(VERSION)-src.tar.gz
 
 distrib:
 	mkdir -p distrib
-	svn export . distrib/pylucene-$(VERSION)
+	svn export --force . distrib/pylucene-$(VERSION)
 	tar -cf - --exclude build $(LUCENE_SRC) | tar -C distrib/pylucene-$(VERSION) -xvf -
 	cd distrib; tar -cvzf $(ARCHIVE) pylucene-$(VERSION)
 	cd distrib; gpg2 --armor --output $(ARCHIVE).asc --detach-sig $(ARCHIVE)
-	cd distrib; openssl md5 < $(ARCHIVE) > $(ARCHIVE).md5
+	cd distrib; md5sum $(ARCHIVE) > $(ARCHIVE).md5
 
 stage:
 	cd distrib; scp -p $(ARCHIVE) $(ARCHIVE).asc $(ARCHIVE).md5 \
