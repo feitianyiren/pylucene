@@ -12,7 +12,7 @@
 
 import os, sys, platform, subprocess
 
-jcc_ver = '2.17'
+jcc_ver = '2.18'
 machine = platform.machine()
 
 if machine.startswith("iPod") or machine.startswith("iPhone"):
@@ -193,13 +193,28 @@ try:
 
     enable_shared = False
     with_setuptools_c7 = ('00000000', '00000006', '*c', '00000007', '*final')
+    with_setuptools_116 = ('00000001', '00000001', '00000006', '*final')
 
     if with_setuptools >= with_setuptools_c7 and 'NO_SHARED' not in os.environ:
-        if platform in ('darwin', 'ipod', 'win32'):
+        if platform in ('ipod', 'win32'):
             enable_shared = True
+
+        elif platform == 'darwin':
+            enable_shared = True
+            if with_setuptools >= with_setuptools_116:
+                # fix Library building by monkey-patching expected _config_vars
+                # into build_ext otherwise build_ext is using sysconfig's
+                # instead, wrongly
+                from setuptools.command import build_ext
+                from distutils.sysconfig import get_config_var
+                get_config_var("LDSHARED")  # ensure _config_vars is initialized
+                from distutils.sysconfig import _config_vars
+                build_ext._CONFIG_VARS = _config_vars
+
         elif platform == 'linux2':
             from helpers.linux import patch_setuptools
             enable_shared = patch_setuptools(with_setuptools)
+
         elif platform == 'mingw32':
             enable_shared = True
             # need to monkeypatch the CygwinCCompiler class to generate
@@ -207,6 +222,12 @@ try:
             from helpers.mingw32 import JCCMinGW32CCompiler
             import distutils.cygwinccompiler
             distutils.cygwinccompiler.Mingw32CCompiler = JCCMinGW32CCompiler
+
+        if enable_shared:
+            if with_setuptools >= with_setuptools_116:
+                from setuptools.extension import Library
+            else:
+                from setuptools import Library
 
 except ImportError:
     if sys.version_info < (2, 4):
@@ -303,7 +324,6 @@ def main(debug):
 
     if with_setuptools and enable_shared:
         from subprocess import Popen, PIPE
-        from setuptools import Library
 
         kwds = { "extra_compile_args": cflags,
                  "include_dirs": includes,
