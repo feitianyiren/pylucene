@@ -15,7 +15,7 @@
 # site-packages directory.
 #
 
-VERSION=4.6.1-0
+VERSION=4.6.1-1
 LUCENE_SVN_VER=HEAD
 LUCENE_VER=4.6.1
 LUCENE_SVN=http://svn.apache.org/repos/asf/lucene/dev/tags/lucene_solr_4_6_1
@@ -406,7 +406,7 @@ distrib:
 	mkdir -p distrib
 	svn export --force . distrib/pylucene-$(VERSION)
 	tar -cf - --exclude build $(LUCENE_SRC) | tar -C distrib/pylucene-$(VERSION) -xvf -
-	cd distrib; tar -cvzf $(ARCHIVE) pylucene-$(VERSION)
+	cd distrib; tar --disable-copyfile -cvzf $(ARCHIVE) pylucene-$(VERSION)
 	cd distrib; gpg2 --armor --output $(ARCHIVE).asc --detach-sig $(ARCHIVE)
 	cd distrib; md5sum $(ARCHIVE) > $(ARCHIVE).md5
 
