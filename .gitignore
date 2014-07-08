@@ -1,0 +1,20 @@
+
+# /
+/lucene-java-*
+/distrib
+/build
+/dist
+/t
+
+# /jcc/
+/jcc/build
+/jcc/dist
+
+# /jcc/jcc/
+/jcc/jcc/config.py
+/jcc/jcc/classes
+
+# /samples/
+/samples/*.index
+/samples/*.Index
+/samples/*.Taxonomy
