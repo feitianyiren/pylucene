@@ -418,6 +418,7 @@ def jcc(args):
     imports = {}
     extra_setup_args = []
     initvm_args = {}
+    strjobs = None
     
     i = 1
     while i < len(args):
@@ -539,6 +540,13 @@ def jcc(args):
             elif arg == '--import':
                 i += 1
                 imports[args[i]] = ()
+            elif arg == '--jobs':
+                i += 1
+                strjobs = args[i]
+                try:
+                    jobs = int(strjobs)
+                except:
+                    jobs = 0
             else:
                 raise ValueError, "Invalid argument: %s" %(arg)
         else:
@@ -548,6 +556,16 @@ def jcc(args):
             classNames.add(arg)
             listedClassNames.add(arg)
         i += 1
+
+    if strjobs is not None:
+        if strjobs != str(jobs):
+            import multiprocessing
+            jobs = multiprocessing.cpu_count() or 1
+
+        if jobs > wrapperFiles:
+            jobs = wrapperFiles
+    else:
+        jobs = 0
 
     if libpath:
         vmargs.append('-Djava.library.path=' + os.pathsep.join(libpath))
@@ -732,7 +750,7 @@ def jcc(args):
                         prefix, root, install_dir, home_dir, use_distutils,
                         shared, compiler, modules, wininst, find_jvm_dll,
                         arch, generics, resources, imports, use_full_names,
-                        egg_info, extra_setup_args)
+                        egg_info, extra_setup_args, jobs)
 
 
 def header(env, out, cls, typeset, packages, excludes, generics,

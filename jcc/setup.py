@@ -402,7 +402,7 @@ def main(debug):
                         'Programming Language :: Python',
                         'Topic :: Software Development :: Code Generators',
                         'Topic :: Software Development :: Libraries :: Java Libraries'],
-        'packages': ['jcc'],
+        'packages': ['jcc', 'jcc.helpers'],
         'package_dir': {'jcc': 'jcc'},
         'package_data': {'jcc': package_data},
         'ext_modules': extensions,

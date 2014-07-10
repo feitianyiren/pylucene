@@ -1596,7 +1596,8 @@ def module(out, allInOne, classes, imports, cppdir, moduleName,
 def compile(env, jccPath, output, moduleName, install, dist, debug, jars,
             version, prefix, root, install_dir, home_dir, use_distutils,
             shared, compiler, modules, wininst, find_jvm_dll, arch, generics,
-            resources, imports, use_full_names, egg_info, extra_setup_args):
+            resources, imports, use_full_names, egg_info, extra_setup_args,
+            jobs):
     try:
         if use_distutils:
             raise ImportError
@@ -1875,6 +1876,22 @@ def compile(env, jccPath, output, moduleName, install, dist, debug, jars,
             else:
                 i += 1
         config_vars['CFLAGS'] = ' '.join(cflags)
+
+    if jobs > 0:
+        # Attempt to parallelise the builds by monkey patching distutils
+        enable_parallel = False
+
+        try:
+            import importlib
+            module = importlib.import_module("jcc.helpers.{}"
+                                             .format(sys.platform))
+            enable_parallel = module.parallelise_distutils(jobs)
+        except ImportError:
+            pass
+
+        if not enable_parallel:
+            raise NotImplementedError("Parallel builds not available on this "
+                                      "platform")
 
     extensions = [Extension('.'.join([moduleName, extname]), **args)]
     script_args.extend(extra_setup_args)

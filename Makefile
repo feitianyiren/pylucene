@@ -104,11 +104,11 @@ NUM_FILES=8
 #NUM_FILES=8
 
 # Linux     (Ubuntu 8.10 64-bit, Python 2.5.2, OpenJDK 1.6, setuptools 0.6c9)
-#PREFIX_PYTHON=/usr
-#ANT=ant
-#PYTHON=$(PREFIX_PYTHON)/bin/python
-#JCC=$(PYTHON) -m jcc --shared
-#NUM_FILES=8
+PREFIX_PYTHON=/usr
+ANT=ant
+PYTHON=$(PREFIX_PYTHON)/bin/python
+JCC=$(PYTHON) -m jcc --shared
+NUM_FILES=8
 
 # Linux     (Ubuntu 6.06, Python 2.4, Java 1.5, no setuptools)
 #PREFIX_PYTHON=/usr
@@ -361,7 +361,8 @@ GENERATE=$(JCC) $(foreach jar,$(JARS),--jar $(jar)) \
            --module python/ICUFoldingFilter.py \
            --module python/ICUTransformFilter.py \
            $(RESOURCES) \
-           --files $(NUM_FILES)
+           --files $(NUM_FILES) \
+		   --jobs N
 
 generate: jars
 	$(GENERATE)
