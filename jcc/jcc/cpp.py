@@ -559,11 +559,12 @@ def jcc(args):
             listedClassNames.add(arg)
         i += 1
 
+    cpu_count = multiprocessing.cpu_count()
+
     if strjobs is not None:
         if strjobs != str(jobs):
             jobs = cpu_count or 1
 
-    cpu_count = multiprocessing.cpu_count()
     jobs = min(min(jobs, wrapperFiles), cpu_count)
 
     if libpath:
