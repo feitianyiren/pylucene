@@ -420,6 +420,7 @@ def jcc(args):
     extra_setup_args = []
     initvm_args = {}
     strjobs = None
+    jobs = 0
     
     i = 1
     while i < len(args):
@@ -547,7 +548,7 @@ def jcc(args):
                 try:
                     jobs = int(strjobs)
                 except ValueError:
-                    jobs = 0
+                    pass
             else:
                 raise ValueError, "Invalid argument: %s" %(arg)
         else:
