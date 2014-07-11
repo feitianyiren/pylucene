@@ -11,6 +11,7 @@
 #   limitations under the License.
 
 import os, sys, zipfile, _jcc
+import multiprocessing
 
 python_ver = '%d.%d.%d' %(sys.version_info[0:3])
 if python_ver < '2.4':
@@ -418,6 +419,7 @@ def jcc(args):
     imports = {}
     extra_setup_args = []
     initvm_args = {}
+    strjobs = None
     
     i = 1
     while i < len(args):
@@ -539,6 +541,13 @@ def jcc(args):
             elif arg == '--import':
                 i += 1
                 imports[args[i]] = ()
+            elif arg == '--jobs':
+                i += 1
+                strjobs = args[i]
+                try:
+                    jobs = int(strjobs)
+                except ValueError:
+                    jobs = 0
             else:
                 raise ValueError, "Invalid argument: %s" %(arg)
         else:
@@ -548,6 +557,13 @@ def jcc(args):
             classNames.add(arg)
             listedClassNames.add(arg)
         i += 1
+
+    if strjobs is not None:
+        if strjobs != str(jobs):
+            jobs = cpu_count or 1
+
+    cpu_count = multiprocessing.cpu_count()
+    jobs = min(min(jobs, wrapperFiles), cpu_count)
 
     if libpath:
         vmargs.append('-Djava.library.path=' + os.pathsep.join(libpath))
@@ -732,7 +748,7 @@ def jcc(args):
                         prefix, root, install_dir, home_dir, use_distutils,
                         shared, compiler, modules, wininst, find_jvm_dll,
                         arch, generics, resources, imports, use_full_names,
-                        egg_info, extra_setup_args)
+                        egg_info, extra_setup_args, jobs)
 
 
 def header(env, out, cls, typeset, packages, excludes, generics,
