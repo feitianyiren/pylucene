@@ -12,16 +12,15 @@
 
 import distutils
 import distutils.ccompiler
-import functools
 import sys
 
 
 def parallelise_distutils(jobs):
     try:
-        from concurrent.futures import ThreadPoolExecutor  # noqa
+        import multiprocessing  # noqa
+        import multiprocessing.pool  # noqa
     except:
-        print ("Error: concurrent.futures not available, "
-               "try installing the futures package first.")
+        print "Error: multiprocessing.pool not available"
         return False
 
     if sys.version_info[1] != 7:
@@ -58,10 +57,10 @@ def parallel_compile(self, sources,
 
         self._compile(obj, src, ext, cc_args, extra_postargs, pp_opts)
 
-    from concurrent.futures import ThreadPoolExecutor
-    with ThreadPoolExecutor(max_workers=jobs) as executor:
-        futures = [executor.submit(_single_compile, obj)
-                   for obj in objects]
-        map(lambda x: x.result, futures)
+    try:
+        import multiprocessing.pool as pool
+        list(pool.ThreadPool(jobs).imap(_single_compile, objects))
+    except ImportError:
+        pass
 
     return objects

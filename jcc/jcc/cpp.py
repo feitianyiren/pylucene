@@ -11,6 +11,7 @@
 #   limitations under the License.
 
 import os, sys, zipfile, _jcc
+import multiprocessing
 
 python_ver = '%d.%d.%d' %(sys.version_info[0:3])
 if python_ver < '2.4':
@@ -545,7 +546,7 @@ def jcc(args):
                 strjobs = args[i]
                 try:
                     jobs = int(strjobs)
-                except:
+                except ValueError:
                     jobs = 0
             else:
                 raise ValueError, "Invalid argument: %s" %(arg)
@@ -559,13 +560,10 @@ def jcc(args):
 
     if strjobs is not None:
         if strjobs != str(jobs):
-            import multiprocessing
-            jobs = multiprocessing.cpu_count() or 1
+            jobs = cpu_count or 1
 
-        if jobs > wrapperFiles:
-            jobs = wrapperFiles
-    else:
-        jobs = 0
+    cpu_count = multiprocessing.cpu_count()
+    jobs = min(min(jobs, wrapperFiles), cpu_count)
 
     if libpath:
         vmargs.append('-Djava.library.path=' + os.pathsep.join(libpath))
