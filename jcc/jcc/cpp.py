@@ -10,13 +10,15 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
-import os, sys, zipfile, _jcc
+import _jcc
+import os
+import sys
+import zipfile
 import multiprocessing
 
-python_ver = '%d.%d.%d' %(sys.version_info[0:3])
-if python_ver < '2.4':
-    from sets import Set as set
 
+python_ver = '%d.%d.%d' % (sys.version_info[0:3])
+if python_ver < '2.4':
     def split_pkg(string, sep):
         parts = string.split(sep)
         if len(parts) > 1:
@@ -24,26 +26,41 @@ if python_ver < '2.4':
         return parts
 
     def sort(list, fn=None, key=None):
-        if fn:
-            list.sort(fn)
-        elif key:
-            def fn(x, y):
-                return cmp(key(x), key(y))
-            list.sort(fn)
-        else:
-            list.sort()
+        if list:
+            if fn:
+                list.sort(fn)
+            elif key:
+                def fn(x, y):
+                    return cmp(key(x), key(y))
+                list.sort(fn)
+            else:
+                list.sort()
+        return list
 
 else:
     def split_pkg(string, sep):
         return string.rsplit(sep, 1)
 
     def sort(list, fn=None, key=None):
-        if fn:
-            list.sort(cmp=fn)
-        elif key:
-            list.sort(key=key)
-        else:
-            list.sort()
+        if list:
+            if fn:
+                list.sort(cmp=fn)
+            elif key:
+                list.sort(key=key)
+            else:
+                list.sort()
+        return list
+
+
+try:
+    from orderedset import OrderedSet as Set
+except ImportError:
+    print ("OrderedSet not available, generated output won't be as cache "
+           "friendly as it could be (solution: pip install orderedset).")
+    if python_ver < '2.4':
+        from sets import Set
+    else:
+        Set = set
 
 
 class JavaError(Exception):
@@ -95,7 +112,7 @@ PRIMITIVES = { 'boolean': 'Z',
                'short': 'S',
                'void': 'V' }
 
-RESERVED = set(['delete', 'and', 'or', 'not', 'xor', 'union', 'register',
+RESERVED = Set(['delete', 'and', 'or', 'not', 'xor', 'union', 'register',
                 'const', 'bool', 'operator', 'typeof', 'asm', 'mutable',
                 'inline', 'typedef', 'struct', 'extern',
                 'NULL', 'DOMAIN', 'IGNORE', 'min', 'max', 'PREFIX'])
@@ -355,8 +372,8 @@ def signature(fn, argsOnly=False):
 
 
 def forward(out, namespace, indent):
-
-    for name, entries in namespace.iteritems():
+    for name in sort(namespace.keys()):
+        entries = namespace[name]
         if entries is True:
             line(out, indent, 'class %s;', cppname(name))
         else:
@@ -379,10 +396,10 @@ def expandjar(path):
 
 def jcc(args):
 
-    classNames = set()
-    listedClassNames = set()
+    classNames = Set()
+    listedClassNames = Set()
     listedMethodNames = {}
-    packages = set()
+    packages = Set()
     jars = []
     classpath = [_jcc.CLASSPATH]
     libpath = []
@@ -554,7 +571,7 @@ def jcc(args):
         else:
             if ':' in arg:
                 arg, method = arg.split(':', 1)
-                listedMethodNames.setdefault(arg, set()).add(method)
+                listedMethodNames.setdefault(arg, Set()).add(method)
             classNames.add(arg)
             listedClassNames.add(arg)
         i += 1
@@ -575,12 +592,12 @@ def jcc(args):
 
     env = initVM(os.pathsep.join(classpath) or None, **initvm_args)
 
-    typeset = set()
-    excludes = set(excludes)
+    typeset = Set()
+    excludes = Set(excludes)
 
     if imports:
         if shared:
-            imports = dict((__import__(import_), set()) for import_ in imports)
+            imports = dict((__import__(import_), Set()) for import_ in imports)
         else:
             raise ValueError, "--shared must be used when using --import"
 
@@ -593,7 +610,7 @@ def jcc(args):
                     prefix, root, install_dir, home_dir, use_distutils,
                     shared, compiler, modules, wininst, find_jvm_dll,
                     arch, generics, resources, imports, use_full_names,
-                    egg_info, extra_setup_args)
+                    egg_info, extra_setup_args, jobs)
     else:
         if imports:
             def walk((include, importset), dirname, names):
@@ -659,7 +676,7 @@ def jcc(args):
                 fileName = '__wrap%02d__.cpp' %(fileCount)
                 out_cpp = file(os.path.join(cppdir, fileName), 'w')
 
-        done = set()
+        done = Set()
         pythonNames = {}
         for importset in imports.itervalues():
             done.update(importset)
@@ -758,7 +775,7 @@ def header(env, out, cls, typeset, packages, excludes, generics,
 
     names = cls.getName().split('.')
     superCls = cls.getSuperclass()
-    declares = set([cls.getClass()])
+    declares = Set([cls.getClass()])
 
     interfaces = []
     if generics:
@@ -831,7 +848,6 @@ def header(env, out, cls, typeset, packages, excludes, generics,
                     break
             else:
                 constructors.append(constructor)
-    sort(constructors, key=lambda x: len(x.getParameterTypes()))
 
     methods = {}
     protectedMethods = []
@@ -868,14 +884,24 @@ def header(env, out, cls, typeset, packages, excludes, generics,
             protectedMethods.append(method)
 
     def _compare(m0, m1):
-        value = cmp(m0.getName(), m1.getName())
+        try:
+            value = cmp(m0.getName(), m1.getName())
+        except AttributeError:
+            value = 0
+
         if value == 0:
-            value = len(m0.getParameterTypes()) - len(m1.getParameterTypes())
+            value = cmp(len(m0.getParameterTypes()),
+                        len(m1.getParameterTypes()))
+            if value == 0:
+                value = cmp(signature(m0), signature(m1))
+
         return value
 
     methods = methods.values()
+    sort(constructors, fn=_compare)
     sort(methods, fn=_compare)
-    methodNames = set([cppname(method.getName()) for method in methods])
+    sort(protectedMethods, fn=_compare)
+    methodNames = Set([cppname(method.getName()) for method in methods])
 
     for constructor in constructors:
         if generics:
@@ -1061,7 +1087,7 @@ def code(env, out, cls, superCls, constructors, methods, protectedMethods,
     line(out, 0, '#include <jni.h>')
     line(out, 0, '#include "JCCEnv.h"')
     line(out, 0, '#include "%s.h"', className.replace('.', '/'))
-    for declare in declares:
+    for declare in sort(list(declares), key=lambda x: x.getName()):
         if declare not in (cls, superCls):
             line(out, 0, '#include "%s.h"', declare.getName().replace('.', '/'))
     line(out, 0, '#include "JArray.h"')

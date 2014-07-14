@@ -18,7 +18,7 @@ from itertools import izip
 from cpp import PRIMITIVES, INDENT, HALF_INDENT
 from cpp import RENAME_METHOD_SUFFIX, RENAME_FIELD_SUFFIX
 from cpp import cppname, cppnames, absname, typename, findClass
-from cpp import line, signature, find_method, split_pkg, sort
+from cpp import line, signature, find_method, split_pkg, sort, Set, python_ver
 from cpp import Modifier, Class, Method
 from cpp import getActualTypeArguments, getTypeParameters
 from config import INCLUDES, CFLAGS, DEBUG_CFLAGS, LFLAGS, IMPLIB_LFLAGS, \
@@ -28,10 +28,6 @@ try:
     from cpp import ParameterizedType, TypeVariable
 except ImportError:
     pass
-
-python_ver = '%d.%d.%d' %(sys.version_info[0:3])
-if python_ver < '2.4':
-    from sets import Set as set
 
 
 RESULTS = { 'boolean': 'Py_RETURN_BOOL(%s);',
@@ -168,7 +164,7 @@ def construct(out, indent, cls, inCase, constructor, names, generics):
 
     params = constructor.getParameterTypes()
     if generics:
-        typeParams = set()
+        typeParams = Set()
     else:
         typeParams = None
 
@@ -343,7 +339,7 @@ def call(out, indent, cls, inCase, method, names, cardinality, isExtension,
     if generics:
         genericRT = method.getGenericReturnType()
         genericParams = method.getGenericParameterTypes()
-        typeParams = set()
+        typeParams = Set()
     else:
         genericRT = None
         genericParams = None
@@ -656,7 +652,7 @@ def python(env, out_h, out, cls, superCls, names, superNames,
         constructorName = 'abstract_init'
 
     if superCls:
-        superMethods = set([method.getName()
+        superMethods = Set([method.getName()
                             for method in superCls.getMethods()])
     else:
         superMethods = ()
@@ -718,7 +714,7 @@ def python(env, out_h, out, cls, superCls, names, superNames,
                         propMethods.setdefault(name[2].lower() + name[3:],
                                                []).append(method)
 
-    properties = set([name for name in propMethods.iterkeys()
+    properties = Set([name for name in propMethods.iterkeys()
                       if name not in allMethods])
     propMethods = [(name, propMethods[name]) for name in properties]
     sort(propMethods, key=lambda x: x[0])
