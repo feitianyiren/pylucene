@@ -405,6 +405,7 @@ def main(debug):
         'packages': ['jcc', 'jcc.helpers'],
         'package_dir': {'jcc': 'jcc'},
         'package_data': {'jcc': package_data},
+        'install_requires': ["ordered-set>=1.2"],  # FIXME: Better as extra_requires?
         'ext_modules': extensions,
         "cmdclass": {"build_py": jcc_build_py},
     }
