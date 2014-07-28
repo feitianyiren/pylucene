@@ -572,7 +572,7 @@ def jcc(args):
                     jobs = cpu_count
                 else:
                     try:
-                        jobs = int(strjobs)
+                        jobs = int(jobs)
                     except ValueError:
                         jobs = 0
             else:
