@@ -55,8 +55,9 @@ else:
 try:
     from orderedset import OrderedSet as Set
 except ImportError:
-    print ("OrderedSet not available, generated output won't be as cache "
-           "friendly as it could be (solution: pip install orderedset).")
+    print >>sys.stderr, ("OrderedSet not available, generated output "
+                         "won't be as cache friendly as it could be "
+                         "(try: pip install orderedset).")
     if python_ver < '2.4':
         from sets import Set
     else:
@@ -436,9 +437,13 @@ def jcc(args):
     imports = {}
     extra_setup_args = []
     initvm_args = {}
-    strjobs = None
     jobs = 0
-    
+
+    try:
+        cpu_count = multiprocessing.cpu_count()
+    except NotImplementedError:
+        cpu_count = 1
+
     i = 1
     while i < len(args):
         arg = args[i]
@@ -561,13 +566,17 @@ def jcc(args):
                 imports[args[i]] = ()
             elif arg == '--jobs':
                 i += 1
-                strjobs = args[i]
-                try:
-                    jobs = int(strjobs)
-                except ValueError:
-                    pass
+                jobs = args[i]
+
+                if jobs.upper() == 'N':
+                    jobs = cpu_count
+                else:
+                    try:
+                        jobs = int(jobs)
+                    except ValueError:
+                        jobs = 0
             else:
-                raise ValueError, "Invalid argument: %s" %(arg)
+                raise ValueError("Invalid argument: %s" % (arg))
         else:
             if ':' in arg:
                 arg, method = arg.split(':', 1)
@@ -576,12 +585,7 @@ def jcc(args):
             listedClassNames.add(arg)
         i += 1
 
-    cpu_count = multiprocessing.cpu_count()
-
-    if strjobs is not None:
-        if strjobs != str(jobs):
-            jobs = cpu_count or 1
-
+    # Limit jobs to lowest between jobs, wrapper files and cores
     jobs = min(min(jobs, wrapperFiles), cpu_count)
 
     if libpath:

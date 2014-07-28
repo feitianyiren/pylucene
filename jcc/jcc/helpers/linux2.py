@@ -43,7 +43,6 @@ def parallel_compile(self, sources,
                      extra_postargs=None,
                      depends=None,
                      jobs=1):
-    # Copied from distutils.ccompiler.CCompiler
     macros, objects, extra_postargs, pp_opts, build = self._setup_compile(
         output_dir, macros, include_dirs, sources, depends, extra_postargs)
 
